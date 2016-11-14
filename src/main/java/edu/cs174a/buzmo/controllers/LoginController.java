@@ -1,11 +1,16 @@
 package edu.cs174a.buzmo.controllers;
 
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import edu.cs174a.buzmo.MainApp;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 public class LoginController {
     @FXML private Button loginButton;
@@ -29,6 +34,17 @@ public class LoginController {
      */
     @FXML
     private void initialize() {
+        // Define event handling
+        loginButton.setOnAction(this::handleLoginButtonAction);
+        closeButton.setOnAction(this::handleCloseButtonAction);
+    }
+
+    private void handleLoginButtonAction(ActionEvent action) {
+        System.out.println("Login Button Pressed!");
+    }
+
+    private void handleCloseButtonAction(ActionEvent action) {
+        Platform.exit();
     }
 
     /**

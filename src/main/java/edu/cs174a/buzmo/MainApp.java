@@ -25,6 +25,11 @@ public class MainApp extends Application {
         showLoginScreen();
     }
 
+    @Override
+    public void stop(){
+        System.out.println("Stage is closing");
+    }
+
     /**
      * Initializes the root layout.
      */
@@ -67,7 +72,6 @@ public class MainApp extends Application {
 
     /**
      * Returns the main stage.
-     * @return
      */
     public Stage getPrimaryStage() {
         return primaryStage;
