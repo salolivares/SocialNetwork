@@ -1,6 +1,7 @@
 package edu.cs174a.buzmo.controllers;
 
 
+import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,6 +42,8 @@ public class LoginController {
 
     private void handleLoginButtonAction(ActionEvent action) {
         System.out.println("Login Button Pressed!");
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
     }
 
     private void handleCloseButtonAction(ActionEvent action) {

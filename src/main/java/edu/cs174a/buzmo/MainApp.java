@@ -8,12 +8,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
     private Stage primaryStage;
-    private BorderPane rootLayout;
+    private StackPane rootLayout;
 
     @Override
     public void start(Stage primaryStage) {
@@ -38,10 +39,11 @@ public class MainApp extends Application {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/view/RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
+            rootLayout = (StackPane) loader.load();
 
             // Show the scene containing the root layout.
             primaryStage.setScene(new Scene(rootLayout));
+            primaryStage.setResizable(false);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,7 +61,7 @@ public class MainApp extends Application {
             AnchorPane loginLayout = (AnchorPane) loader.load();
 
             // Set login layout into the center of root layout.
-            rootLayout.setCenter(loginLayout);
+            ((BorderPane)rootLayout.getChildren().get(0)).setCenter(loginLayout);
 
             // Give the controller access to the main app.
             LoginController controller = loader.getController();
@@ -75,6 +77,10 @@ public class MainApp extends Application {
      */
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public StackPane getRootLayout() {
+        return rootLayout;
     }
 
     public static void main(String[] args) {
