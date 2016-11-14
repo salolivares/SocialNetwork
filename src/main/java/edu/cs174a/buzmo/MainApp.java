@@ -16,6 +16,10 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private StackPane rootLayout;
 
+    public MainApp() {
+        /* Setup all global variables here. For example all the models. */
+    }
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
