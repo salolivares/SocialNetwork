@@ -45,7 +45,7 @@ public class LoginController {
         ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
         ps.startSpinner();
 
-        Thread thread1 = new Thread(() -> {
+        Thread login = new Thread(() -> {
             System.out.println("Logging in.");
             try {
                 // Simulate long server call!
@@ -53,6 +53,7 @@ public class LoginController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             // Update UI and stop spinner
             Platform.runLater(() -> {
                 ps.stopSpinner();
@@ -60,7 +61,7 @@ public class LoginController {
 
         });
 
-        thread1.start();
+        login.start();
 
     }
 
