@@ -6,12 +6,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import edu.cs174a.buzmo.MainApp;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyCode;
 
 public class LoginController {
     @FXML private Button loginButton;
@@ -38,6 +36,11 @@ public class LoginController {
         // Define event handling
         loginButton.setOnAction(this::handleLoginButtonAction);
         closeButton.setOnAction(this::handleCloseButtonAction);
+        passwordField.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER){
+                loginButton.fire();
+            }
+        });
     }
 
     private void handleLoginButtonAction(ActionEvent action) {
