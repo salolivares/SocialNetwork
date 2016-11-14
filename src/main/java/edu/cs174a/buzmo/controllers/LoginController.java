@@ -44,6 +44,24 @@ public class LoginController {
         System.out.println("Login Button Pressed!");
         ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
         ps.startSpinner();
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println("Logging in.");
+            try {
+                // Simulate long server call!
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Update UI and stop spinner
+            Platform.runLater(() -> {
+                ps.stopSpinner();
+            });
+
+        });
+
+        thread1.start();
+
     }
 
     private void handleCloseButtonAction(ActionEvent action) {
