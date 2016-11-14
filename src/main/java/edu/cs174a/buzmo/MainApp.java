@@ -27,8 +27,8 @@ public class MainApp extends Application {
     }
 
     @Override
-    public void stop(){
-        System.out.println("Stage is closing");
+    public void stop() {
+        System.out.println("Application is exiting");
     }
 
     /**
@@ -51,7 +51,7 @@ public class MainApp extends Application {
     }
 
     /**
-     * Shows the person overview inside the root layout.
+     * Shows the login screen inside the root layout.
      */
     public void showLoginScreen() {
         try {
