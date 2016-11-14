@@ -2,6 +2,7 @@ package edu.cs174a.buzmo;
 
 import java.io.IOException;
 
+import edu.cs174a.buzmo.controllers.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -54,6 +55,11 @@ public class MainApp extends Application {
 
             // Set login layout into the center of root layout.
             rootLayout.setCenter(loginLayout);
+
+            // Give the controller access to the main app.
+            LoginController controller = loader.getController();
+            controller.setMainApp(this);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
