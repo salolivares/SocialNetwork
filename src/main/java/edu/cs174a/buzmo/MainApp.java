@@ -18,7 +18,6 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private StackPane rootLayout;
     private LoginManager loginManager;
-    private DatabaseConnection databaseConnection;
 
     // executes database operations concurrent to JavaFX operations.
     private ExecutorService databaseExecutor;
@@ -29,7 +28,6 @@ public class MainApp extends Application {
     @Override
     public void init() throws Exception {
         databaseExecutor = Executors.newFixedThreadPool(1, new DatabaseThreadFactory() );
-        databaseConnection = new DatabaseConnection();
     }
 
     public MainApp() {
@@ -52,7 +50,6 @@ public class MainApp extends Application {
     public void stop() throws Exception {
         System.out.println("Application is exiting...");
         databaseExecutor.shutdown();
-        databaseConnection.closeConnection();
         if (!databaseExecutor.awaitTermination(4, TimeUnit.SECONDS)) {
             System.out.println("Database execution thread timed out.");
         }
@@ -90,6 +87,10 @@ public class MainApp extends Application {
 
     public LoginManager getLoginManager() {
         return loginManager;
+    }
+
+    public ExecutorService getDatabaseExecutor() {
+        return databaseExecutor;
     }
 
     public static void main(String[] args) {

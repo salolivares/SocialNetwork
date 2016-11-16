@@ -1,5 +1,6 @@
 package edu.cs174a.buzmo.controllers;
 
+import edu.cs174a.buzmo.tasks.FetchLoginCredentialsTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -9,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+
+import java.sql.SQLException;
 
 public class LoginController {
     @FXML private Button loginButton;
@@ -44,35 +47,35 @@ public class LoginController {
 
     private void handleLoginButtonAction(ActionEvent action) {
         System.out.println("Login Button Pressed!");
-        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
-
-        ps.startSpinner();
-
-        // Put the login process in the background
-        Thread login = new Thread(() -> {
-            System.out.println("Logging in...");
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            String sessionID = authorize();
-            Platform.runLater(() -> {
-                if (sessionID != null) mainApp.getLoginManager().authenticated(sessionID);
-                ps.stopSpinner();
-            });
-
-        });
-
-        login.start();
+        try {
+            login();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
-    private String authorize() {
-        return "sal".equals(emailTextField.getText()) && "123".equals(passwordField.getText())
-                        ? emailTextField.getText()
-                        : null;
+    private void login() throws SQLException, ClassNotFoundException {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final FetchLoginCredentialsTask fetchLoginCredentialsTask = new FetchLoginCredentialsTask(
+                emailTextField.getText(),
+                passwordField.getText()
+                );
+
+        fetchLoginCredentialsTask.setOnSucceeded(t -> {
+            Platform.runLater(ps::stopSpinner);
+
+            if(fetchLoginCredentialsTask.getValue()){
+                Platform.runLater(()->{
+                    mainApp.getLoginManager().authenticated(emailTextField.getText());
+                });
+            }
+        });
+
+        mainApp.getDatabaseExecutor().submit(fetchLoginCredentialsTask);
     }
 
 
