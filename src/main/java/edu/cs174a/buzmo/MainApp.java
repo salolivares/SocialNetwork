@@ -2,12 +2,9 @@ package edu.cs174a.buzmo;
 
 import java.io.IOException;
 
-import edu.cs174a.buzmo.controllers.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -15,6 +12,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private StackPane rootLayout;
+    private LoginManager loginManager;
 
     public MainApp() {
         /* Setup all global variables here. For example all the models. */
@@ -25,9 +23,11 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Buzmo");
 
-        initRootLayout();
+        loginManager = new LoginManager(this);
 
-        showLoginScreen();
+        initRootLayout();
+        loginManager.showLoginScreen();
+
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MainApp extends Application {
     /**
      * Initializes the root layout.
      */
-    public void initRootLayout() {
+    private void initRootLayout() {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
@@ -55,28 +55,6 @@ public class MainApp extends Application {
     }
 
     /**
-     * Shows the login screen inside the root layout.
-     */
-    public void showLoginScreen() {
-        try {
-            // Load Login Layout.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/view/LoginLayout.fxml"));
-            AnchorPane loginLayout = (AnchorPane) loader.load();
-
-            // Set login layout into the center of root layout.
-            ((BorderPane)rootLayout.getChildren().get(0)).setCenter(loginLayout);
-
-            // Give the controller access to the main app.
-            LoginController controller = loader.getController();
-            controller.setMainApp(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Returns the main stage.
      */
     public Stage getPrimaryStage() {
@@ -85,6 +63,10 @@ public class MainApp extends Application {
 
     public StackPane getRootLayout() {
         return rootLayout;
+    }
+
+    public LoginManager getLoginManager() {
+        return loginManager;
     }
 
     public static void main(String[] args) {

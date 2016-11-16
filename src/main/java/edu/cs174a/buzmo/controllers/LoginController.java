@@ -11,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
+import java.util.concurrent.*;
+
 public class LoginController {
     @FXML private Button loginButton;
     @FXML private Button closeButton;
@@ -46,13 +48,18 @@ public class LoginController {
     private void handleLoginButtonAction(ActionEvent action) {
         System.out.println("Login Button Pressed!");
         ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+
         ps.startSpinner();
 
+        // Put the login process in the background
         Thread login = new Thread(() -> {
-            System.out.println("Logging in.");
+            System.out.println("Logging in...");
             try {
-                // Simulate long server call!
-                Thread.sleep(4000);
+                Thread.sleep(1000);
+                String sessionID = authorize();
+                if (sessionID != null) {
+                    mainApp.getLoginManager().authenticated(sessionID);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -65,8 +72,14 @@ public class LoginController {
         });
 
         login.start();
-
     }
+
+    private String authorize() {
+        return "open".equals(emailTextField.getText()) && "sesame".equals(passwordField.getText())
+                        ? emailTextField.getText()
+                        : null;
+    }
+
 
     private void handleCloseButtonAction(ActionEvent action) {
         Platform.exit();
