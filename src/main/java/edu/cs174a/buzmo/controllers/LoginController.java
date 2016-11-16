@@ -54,18 +54,16 @@ public class LoginController {
         // Put the login process in the background
         Thread login = new Thread(() -> {
             System.out.println("Logging in...");
+
             try {
                 Thread.sleep(1000);
-                String sessionID = authorize();
-                if (sessionID != null) {
-                    mainApp.getLoginManager().authenticated(sessionID);
-                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            // Update UI and stop spinner
+            String sessionID = authorize();
             Platform.runLater(() -> {
+                if (sessionID != null) mainApp.getLoginManager().authenticated(sessionID);
                 ps.stopSpinner();
             });
 
@@ -75,7 +73,7 @@ public class LoginController {
     }
 
     private String authorize() {
-        return "open".equals(emailTextField.getText()) && "sesame".equals(passwordField.getText())
+        return "sal".equals(emailTextField.getText()) && "123".equals(passwordField.getText())
                         ? emailTextField.getText()
                         : null;
     }

@@ -22,7 +22,7 @@ public class LoginManager {
      * Will show the main application screen.
      */
     public void authenticated(String sessionID) {
-        System.out.println("Authenticated with " + sessionID );
+        System.out.println("Authenticated: " + sessionID );
         showHomeLayout(sessionID);
     }
 
@@ -58,7 +58,7 @@ public class LoginManager {
 
     public void showHomeLayout(String sessionID) {
         try {
-            // Load Login Layout.
+            // Load Login Layout
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/view/HomeLayout.fxml"));
             AnchorPane homeLayout = (AnchorPane) loader.load();
