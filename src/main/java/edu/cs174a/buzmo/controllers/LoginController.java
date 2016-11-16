@@ -1,6 +1,5 @@
 package edu.cs174a.buzmo.controllers;
 
-
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -10,8 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-
-import java.util.concurrent.*;
 
 public class LoginController {
     @FXML private Button loginButton;

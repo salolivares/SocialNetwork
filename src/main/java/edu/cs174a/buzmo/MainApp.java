@@ -1,7 +1,12 @@
 package edu.cs174a.buzmo;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import edu.cs174a.buzmo.util.DatabaseConnection;
+import edu.cs174a.buzmo.util.DatabaseThreadFactory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,6 +18,19 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private StackPane rootLayout;
     private LoginManager loginManager;
+    private DatabaseConnection databaseConnection;
+
+    // executes database operations concurrent to JavaFX operations.
+    private ExecutorService databaseExecutor;
+
+    // initialize the program.
+    // setting the database executor thread pool size to 1 ensures
+    // only one database command is executed at any one time.
+    @Override
+    public void init() throws Exception {
+        databaseExecutor = Executors.newFixedThreadPool(1, new DatabaseThreadFactory() );
+        databaseConnection = new DatabaseConnection();
+    }
 
     public MainApp() {
         /* Setup all global variables here. For example all the models. */
@@ -31,8 +49,13 @@ public class MainApp extends Application {
     }
 
     @Override
-    public void stop() {
-        System.out.println("Application is exiting");
+    public void stop() throws Exception {
+        System.out.println("Application is exiting...");
+        databaseExecutor.shutdown();
+        databaseConnection.closeConnection();
+        if (!databaseExecutor.awaitTermination(4, TimeUnit.SECONDS)) {
+            System.out.println("Database execution thread timed out.");
+        }
     }
 
     /**
