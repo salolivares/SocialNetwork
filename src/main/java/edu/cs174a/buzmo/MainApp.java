@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import edu.cs174a.buzmo.util.DatabaseConnection;
+import edu.cs174a.buzmo.util.Database;
 import edu.cs174a.buzmo.util.DatabaseThreadFactory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +18,7 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private StackPane rootLayout;
     private LoginManager loginManager;
+    private Database databaseConnection;
 
     // executes database operations concurrent to JavaFX operations.
     private ExecutorService databaseExecutor;
@@ -43,7 +44,6 @@ public class MainApp extends Application {
 
         initRootLayout();
         loginManager.showLoginScreen();
-
     }
 
     @Override
@@ -53,6 +53,7 @@ public class MainApp extends Application {
         if (!databaseExecutor.awaitTermination(4, TimeUnit.SECONDS)) {
             System.out.println("Database execution thread timed out.");
         }
+        Database.getInstance().closeConnection();
     }
 
     /**

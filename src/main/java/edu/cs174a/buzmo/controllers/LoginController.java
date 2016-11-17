@@ -60,10 +60,7 @@ public class LoginController {
         ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
         ps.startSpinner();
 
-        final FetchLoginCredentialsTask fetchLoginCredentialsTask = new FetchLoginCredentialsTask(
-                emailTextField.getText(),
-                passwordField.getText()
-                );
+        final FetchLoginCredentialsTask fetchLoginCredentialsTask = new FetchLoginCredentialsTask(emailTextField.getText(), passwordField.getText());
 
         fetchLoginCredentialsTask.setOnSucceeded(t -> {
             Platform.runLater(ps::stopSpinner);
@@ -72,6 +69,8 @@ public class LoginController {
                 Platform.runLater(()->{
                     mainApp.getLoginManager().authenticated(emailTextField.getText());
                 });
+            } else {
+                System.out.println("Authentication Failed");
             }
         });
 

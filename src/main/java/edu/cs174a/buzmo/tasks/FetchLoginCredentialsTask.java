@@ -1,19 +1,17 @@
 package edu.cs174a.buzmo.tasks;
 
-import edu.cs174a.buzmo.util.DatabaseConnection;
+import edu.cs174a.buzmo.util.DatabaseQuery;
 import javafx.concurrent.Task;
 
-import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
 
 public class FetchLoginCredentialsTask extends Task<Boolean> {
     private String user;
     private String pass;
-    private DatabaseConnection databaseConnection;
-    private Connection conn;
 
     public FetchLoginCredentialsTask(String user, String pass) {
-        this.databaseConnection = new DatabaseConnection();
         this.user = user;
         this.pass = pass;
     }
@@ -24,9 +22,23 @@ public class FetchLoginCredentialsTask extends Task<Boolean> {
     }
 
     private Boolean fetchLoginCredentials() throws SQLException, ClassNotFoundException {
-        databaseConnection.getConnection();
-        Boolean result = "sal".equals(user) && "123".equals(pass);
-        databaseConnection.closeConnection();
+        DatabaseQuery q = new DatabaseQuery();
+        Boolean result = false;
+        ResultSet rs = q.query("SELECT email, password FROM SALOLIVARES.Users");
+
+        while(rs.next()){
+            String id  = rs.getString("email");
+            String age = rs.getString("password");
+
+            if (id.equals(user) && age.equals(pass)){
+                result = true;
+                break;
+            }
+        }
+
+        //Important!! Release resources.
+        q.close();
+
         return result;
     }
 }
