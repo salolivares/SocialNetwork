@@ -27,6 +27,7 @@ public class Database {
         if(connection == null || connection.isClosed()) {
             Class.forName(JDBC_DRIVER);
             connection =  DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connection opened to DB");
         }
 
         return connection;
@@ -34,5 +35,7 @@ public class Database {
 
     public void closeConnection() throws SQLException {
         DbUtils.close(connection);
+        System.out.println("Connection closed to DB");
     }
+
 }

@@ -48,12 +48,12 @@ public class MainApp extends Application {
 
     @Override
     public void stop() throws Exception {
-        System.out.println("Application is exiting...");
         databaseExecutor.shutdown();
         if (!databaseExecutor.awaitTermination(4, TimeUnit.SECONDS)) {
             System.out.println("Database execution thread timed out.");
         }
         Database.getInstance().closeConnection();
+        System.out.println("Application is exiting...");
     }
 
     /**
