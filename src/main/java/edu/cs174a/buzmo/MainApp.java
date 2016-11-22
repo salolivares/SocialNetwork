@@ -17,7 +17,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private StackPane rootLayout;
-    private LoginManager loginManager;
+    private GUIManager GUIManager;
     private Database databaseConnection;
 
     // executes database operations concurrent to JavaFX operations.
@@ -40,10 +40,10 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Buzmo");
 
-        loginManager = new LoginManager(this);
+        GUIManager = new GUIManager(this);
 
         initRootLayout();
-        loginManager.showLoginScreen();
+        GUIManager.showLoginScreen();
     }
 
     @Override
@@ -86,8 +86,8 @@ public class MainApp extends Application {
         return rootLayout;
     }
 
-    public LoginManager getLoginManager() {
-        return loginManager;
+    public GUIManager getGUIManager() {
+        return GUIManager;
     }
 
     public ExecutorService getDatabaseExecutor() {

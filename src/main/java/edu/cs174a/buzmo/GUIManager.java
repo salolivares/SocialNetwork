@@ -10,10 +10,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 /** Manages control flow for login */
-public class LoginManager {
+public class GUIManager {
     private MainApp mainApp;
 
-    public LoginManager(MainApp mainApp) {
+    public GUIManager(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 

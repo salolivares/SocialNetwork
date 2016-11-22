@@ -67,7 +67,7 @@ public class LoginController {
 
             if(fetchLoginCredentialsTask.getValue()){
                 Platform.runLater(()->{
-                    mainApp.getLoginManager().authenticated(emailTextField.getText());
+                    mainApp.getGUIManager().authenticated(emailTextField.getText());
                 });
             } else {
                 System.out.println("Authentication Failed");
