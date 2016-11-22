@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import edu.cs174a.buzmo.controllers.HomeController;
 import edu.cs174a.buzmo.controllers.LoginController;
+import edu.cs174a.buzmo.controllers.NewAccountController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -74,4 +75,24 @@ public class GUIManager {
             e.printStackTrace();
         }
     }
+
+    public void showCreateAccountLayout() {
+        try {
+            // Load Login Layout
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/NewAccountLayout.fxml"));
+            AnchorPane newAccountLayout = (AnchorPane) loader.load();
+
+            // Set login layout into the center of root layout.
+            ((BorderPane)mainApp.getRootLayout().getChildren().get(0)).setCenter(newAccountLayout);
+
+            // Give the controller access to the main app.
+            NewAccountController controller = loader.getController();
+            controller.setMainApp(mainApp);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

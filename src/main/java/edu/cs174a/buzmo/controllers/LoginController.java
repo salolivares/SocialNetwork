@@ -16,6 +16,7 @@ import java.sql.SQLException;
 public class LoginController {
     @FXML private Button loginButton;
     @FXML private Button closeButton;
+    @FXML private Button createAccountButton;
     @FXML private TextField emailTextField;
     @FXML private PasswordField passwordField;
 
@@ -38,11 +39,16 @@ public class LoginController {
         // Define event handling
         loginButton.setOnAction(this::handleLoginButtonAction);
         closeButton.setOnAction(this::handleCloseButtonAction);
+        createAccountButton.setOnAction(this::handleNewAccountButtonAction);
         passwordField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER){
                 loginButton.fire();
             }
         });
+    }
+
+    private void handleNewAccountButtonAction(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showCreateAccountLayout();
     }
 
     private void handleLoginButtonAction(ActionEvent action) {
