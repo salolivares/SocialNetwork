@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.cs174a.buzmo.controllers.TopicWordsController">
+   <children>
+      <ListView fx:id="topicList" layoutX="137.0" layoutY="134.0" prefHeight="300.0" prefWidth="326.0" />
+      <TextField fx:id="wordTextField" layoutX="137.0" layoutY="95.0" prefHeight="27.0" prefWidth="205.0" promptText="Topic Word to Add" />
+      <Button fx:id="addButton" layoutX="354.0" layoutY="95.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="109.0" text="Add" />
+      <Button fx:id="removeButton" layoutX="191.0" layoutY="441.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="218.0" text="Remove selected topic word" />
+      <Label layoutX="221.0" layoutY="32.0" prefHeight="30.0" prefWidth="159.0" text="Topic Words" textAlignment="CENTER">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

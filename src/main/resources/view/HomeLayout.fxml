@@ -22,5 +22,6 @@
       <Button fx:id="logoutButton" layoutX="222.0" layoutY="444.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="167.0" text="Logout" textAlignment="CENTER" wrapText="true" />
       <Label fx:id="loggedinLabel" layoutX="14.0" layoutY="436.0" prefHeight="17.0" prefWidth="193.0" text="Logged In:" />
       <Label fx:id="isManagerLabel" layoutX="14.0" layoutY="457.0" prefHeight="17.0" prefWidth="193.0" text="Is Manager?:" />
+      <Button fx:id="topicWordButton" layoutX="237.0" layoutY="393.0" mnemonicParsing="false" text="Set my topic words" />
    </children>
 </AnchorPane>

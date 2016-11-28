@@ -13,6 +13,7 @@ public class HomeController {
     @FXML private Label loggedinLabel;
     @FXML private Label isManagerLabel;
     @FXML private Button logoutButton;
+    @FXML private Button topicWordButton;
 
     public HomeController() {
     }
@@ -23,7 +24,12 @@ public class HomeController {
      */
     @FXML
     private void initialize() {
+        topicWordButton.setOnAction(this::handleTopicButtonAction);
         logoutButton.setOnAction(this::handleLogoutButtonAction);
+    }
+
+    private void handleTopicButtonAction(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showTopicWordsLayout();
     }
 
     private void handleLogoutButtonAction(ActionEvent actionEvent) {

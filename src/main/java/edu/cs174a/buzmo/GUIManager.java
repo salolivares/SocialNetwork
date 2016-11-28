@@ -6,6 +6,7 @@ import java.io.IOException;
 import edu.cs174a.buzmo.controllers.HomeController;
 import edu.cs174a.buzmo.controllers.LoginController;
 import edu.cs174a.buzmo.controllers.NewAccountController;
+import edu.cs174a.buzmo.controllers.TopicWordsController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -90,6 +91,25 @@ public class GUIManager {
 
             // Give the controller access to the main app.
             NewAccountController controller = loader.getController();
+            controller.setMainApp(mainApp);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showTopicWordsLayout() {
+        try {
+            // Load Login Layout
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/TopicWordsLayout.fxml"));
+            AnchorPane topicWordsLayout = (AnchorPane) loader.load();
+
+            // Set login layout into the center of root layout.
+            ((BorderPane)mainApp.getRootLayout().getChildren().get(0)).setCenter(topicWordsLayout);
+
+            // Give the controller access to the main app.
+            TopicWordsController controller = loader.getController();
             controller.setMainApp(mainApp);
 
         } catch (IOException e) {
