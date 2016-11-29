@@ -24,15 +24,18 @@ public class FetchTopicWordsTask extends Task<ObservableList<TopicWord>> {
     private ObservableList<TopicWord> fetchUserTopicWords()  {
         DatabaseQuery q = null;
         ObservableList<TopicWord> result = FXCollections.observableArrayList();
+
         try {
             q = new DatabaseQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             return result;
         }
+
         String sql = "SELECT * FROM USERTOPICS, TOPICWORDS WHERE USERTOPICS.TID = TOPICWORDS.TID AND USERTOPICS.EMAIL = " + "'" + this.email + "'";
         System.out.println(sql);
         ResultSet rs = null;
+
         try {
             rs = q.query(sql);
             while(rs.next()){

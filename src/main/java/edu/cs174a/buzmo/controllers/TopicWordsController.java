@@ -50,6 +50,7 @@ public class TopicWordsController {
 
     private void handleAddAction(ActionEvent actionEvent) {
         addNewTopicWord();
+        wordTextField.clear();
     }
 
     private void addNewTopicWord() {
@@ -59,7 +60,10 @@ public class TopicWordsController {
         final CreateUserTopicWordTask createUserTopicWordTask = new CreateUserTopicWordTask(mainApp.getGUIManager().getEmail(), wordTextField.getText());
 
         createUserTopicWordTask.setOnSucceeded(t -> {
-            Platform.runLater(ps::stopSpinner);
+            Platform.runLater(()->{
+                ps.stopSpinner();
+                refreshButton.fire();
+            });
             mainApp.getDatabaseExecutor().submit(createUserTopicWordTask);
         });
 
@@ -93,6 +97,10 @@ public class TopicWordsController {
 
     private void handleBackAction(ActionEvent actionEvent) {
         mainApp.getGUIManager().showHomeLayout();
+    }
+
+    public void refreshWordList(){
+        refreshButton.fire();
     }
 
 

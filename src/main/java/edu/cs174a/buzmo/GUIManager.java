@@ -111,6 +111,7 @@ public class GUIManager {
             // Give the controller access to the main app.
             TopicWordsController controller = loader.getController();
             controller.setMainApp(mainApp);
+            controller.refreshWordList();
 
         } catch (IOException e) {
             e.printStackTrace();

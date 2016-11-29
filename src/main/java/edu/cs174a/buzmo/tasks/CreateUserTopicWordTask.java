@@ -43,6 +43,7 @@ public class CreateUserTopicWordTask extends Task<Void> {
 
     private void newUserTopicWord()  {
         DatabaseQuery q = null;
+
         try {
             q = new DatabaseQuery();
         } catch (SQLException | ClassNotFoundException e) {
