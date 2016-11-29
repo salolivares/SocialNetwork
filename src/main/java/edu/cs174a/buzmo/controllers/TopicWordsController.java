@@ -1,6 +1,7 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
+import edu.cs174a.buzmo.tasks.CreateUserTopicWordTask;
 import edu.cs174a.buzmo.tasks.FetchTopicWordsTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import edu.cs174a.buzmo.util.TopicWord;
@@ -48,12 +49,27 @@ public class TopicWordsController {
     }
 
     private void handleAddAction(ActionEvent actionEvent) {
-        
+        addNewTopicWord();
+    }
+
+    private void addNewTopicWord() {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final CreateUserTopicWordTask createUserTopicWordTask = new CreateUserTopicWordTask(mainApp.getGUIManager().getEmail(), wordTextField.getText());
+
+        createUserTopicWordTask.setOnSucceeded(t -> {
+            Platform.runLater(ps::stopSpinner);
+            mainApp.getDatabaseExecutor().submit(createUserTopicWordTask);
+        });
+
+        mainApp.getDatabaseExecutor().submit(createUserTopicWordTask);
     }
 
     private void handleRefreshAction(ActionEvent actionEvent) {
         System.out.println("Refreshing...");
         populateTopicWordList();
+        System.out.println("Populated!");
     }
 
     private void populateTopicWordList() {
@@ -65,6 +81,11 @@ public class TopicWordsController {
         fetchTopicWordsTask.setOnSucceeded(t -> {
             Platform.runLater(ps::stopSpinner);
             topicList.setItems(fetchTopicWordsTask.getValue());
+        });
+
+        fetchTopicWordsTask.setOnFailed(t -> {
+            Platform.runLater(ps::stopSpinner);
+            System.out.println("FAILED");
         });
 
         mainApp.getDatabaseExecutor().submit(fetchTopicWordsTask);

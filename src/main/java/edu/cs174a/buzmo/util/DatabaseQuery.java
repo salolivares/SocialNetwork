@@ -35,10 +35,14 @@ public class DatabaseQuery {
         return pstmt;
     }
 
-    public void close() throws SQLException {
-        DbUtils.close(rs);
-        DbUtils.close(stmt);
-        DbUtils.close(pstmt);
+    public void close()  {
+        try {
+            DbUtils.close(rs);
+            DbUtils.close(stmt);
+            DbUtils.close(pstmt);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -21,21 +21,31 @@ public class FetchTopicWordsTask extends Task<ObservableList<TopicWord>> {
         return fetchUserTopicWords();
     }
 
-    private ObservableList<TopicWord> fetchUserTopicWords() throws SQLException, ClassNotFoundException {
-        DatabaseQuery q = new DatabaseQuery();
+    private ObservableList<TopicWord> fetchUserTopicWords()  {
+        DatabaseQuery q = null;
         ObservableList<TopicWord> result = FXCollections.observableArrayList();
+        try {
+            q = new DatabaseQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return result;
+        }
         String sql = "SELECT * FROM USERTOPICS, TOPICWORDS WHERE USERTOPICS.TID = TOPICWORDS.TID AND USERTOPICS.EMAIL = " + "'" + this.email + "'";
         System.out.println(sql);
-        ResultSet rs = q.query(sql);
-
-        while(rs.next()){
-            String tid = rs.getString("USERTOPICS.TID");
-            String word = rs.getString("WORD");
-            result.add(new TopicWord(tid, word));
+        ResultSet rs = null;
+        try {
+            rs = q.query(sql);
+            while(rs.next()){
+                String tid = rs.getString("tid");
+                String word = rs.getString("word");
+                result.add(new TopicWord(tid, word));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            q.close();
         }
 
-        //Important!! Release resources.
-        q.close();
 
         return result;
     }
