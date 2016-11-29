@@ -3,6 +3,7 @@ package edu.cs174a.buzmo.controllers;
 import edu.cs174a.buzmo.MainApp;
 import edu.cs174a.buzmo.tasks.CreateUserTopicWordTask;
 import edu.cs174a.buzmo.tasks.FetchTopicWordsTask;
+import edu.cs174a.buzmo.tasks.RemoveUserTopicWordTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import edu.cs174a.buzmo.util.TopicWord;
 import javafx.application.Platform;
@@ -34,6 +35,7 @@ public class TopicWordsController {
         refreshButton.setOnAction(this::handleRefreshAction);
         backButton.setOnAction(this::handleBackAction);
         addButton.setOnAction(this::handleAddAction);
+        removeButton.setOnAction(this::handleRemoveAction);
         topicList.setCellFactory(param -> new ListCell<TopicWord>() {
             @Override
             protected void updateItem(TopicWord item, boolean empty) {
@@ -48,12 +50,35 @@ public class TopicWordsController {
         });
     }
 
+    private void handleRemoveAction(ActionEvent actionEvent) {
+        TopicWord toDelete = topicList.getSelectionModel().getSelectedItem();
+        if(toDelete != null){
+            removeUserTopicWord(toDelete);
+        }
+    }
+
+    private void removeUserTopicWord(TopicWord toDelete) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final RemoveUserTopicWordTask removeUserTopicWordTask = new RemoveUserTopicWordTask(mainApp.getGUIManager().getEmail(), toDelete);
+
+        removeUserTopicWordTask.setOnSucceeded(t -> {
+            Platform.runLater(()->{
+                ps.stopSpinner();
+                refreshButton.fire();
+            });
+        });
+
+        mainApp.getDatabaseExecutor().submit(removeUserTopicWordTask);
+    }
+
     private void handleAddAction(ActionEvent actionEvent) {
-        addNewTopicWord();
+        addNewUserTopicWord();
         wordTextField.clear();
     }
 
-    private void addNewTopicWord() {
+    private void addNewUserTopicWord() {
         ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
         ps.startSpinner();
 
@@ -64,7 +89,6 @@ public class TopicWordsController {
                 ps.stopSpinner();
                 refreshButton.fire();
             });
-            mainApp.getDatabaseExecutor().submit(createUserTopicWordTask);
         });
 
         mainApp.getDatabaseExecutor().submit(createUserTopicWordTask);

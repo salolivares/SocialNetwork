@@ -33,7 +33,6 @@ public class FetchTopicWordsTask extends Task<ObservableList<TopicWord>> {
         }
 
         String sql = "SELECT * FROM USERTOPICS, TOPICWORDS WHERE USERTOPICS.TID = TOPICWORDS.TID AND USERTOPICS.EMAIL = " + "'" + this.email + "'";
-        System.out.println(sql);
         ResultSet rs = null;
 
         try {

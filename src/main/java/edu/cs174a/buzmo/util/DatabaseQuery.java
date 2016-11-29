@@ -18,7 +18,6 @@ public class DatabaseQuery {
     }
 
     public ResultSet query(String sql) throws SQLException, ClassNotFoundException {
-        System.out.println("Creating statement...");
         stmt = conn.createStatement();
 
         rs = stmt.executeQuery(sql);
@@ -27,7 +26,6 @@ public class DatabaseQuery {
     }
 
     public void pQuery(String sql) throws SQLException {
-        System.out.println("Creating prepared statement...");
         pstmt = conn.prepareStatement(sql);
     }
 
