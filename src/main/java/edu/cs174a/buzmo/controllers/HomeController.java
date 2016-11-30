@@ -15,6 +15,7 @@ public class HomeController {
     @FXML private Button logoutButton;
     @FXML private Button topicWordButton;
     @FXML private Button searchButton;
+    @FXML private Button myCircleButton;
 
     public HomeController() {
     }
@@ -28,6 +29,11 @@ public class HomeController {
         topicWordButton.setOnAction(this::handleTopicButtonAction);
         logoutButton.setOnAction(this::handleLogoutButtonAction);
         searchButton.setOnAction(this::handleSearchButtonAction);
+        myCircleButton.setOnAction(this::handleMyCircleButton);
+    }
+
+    private void handleMyCircleButton(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showMyCircleMenuLayout();
     }
 
     private void handleTopicButtonAction(ActionEvent actionEvent) {

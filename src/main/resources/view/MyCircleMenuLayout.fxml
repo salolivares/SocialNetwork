@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="backButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.cs174a.buzmo.controllers.MyCircleController">
    <children>
       <Label layoutX="212.0" layoutY="28.0" text="MyCircle Menu">
          <font>
@@ -14,10 +13,9 @@
          </font>
       </Label>
       <Button fx:id="backButton" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" text="&lt; Back" />
-      <Button fx:id="postMessageButton" layoutX="249.0" layoutY="91.0" mnemonicParsing="false" text="Post Message" />
-      <Button fx:id="viewMessagesButton" layoutX="216.0" layoutY="137.0" mnemonicParsing="false" text="View MyCircle Messages" />
-      <Button fx:id="viewRequestsButton" layoutX="218.0" layoutY="187.0" mnemonicParsing="false" text="View MyCircle Requests" />
-      <Button fx:id="searchUsersButton" layoutX="250.0" layoutY="239.0" mnemonicParsing="false" text="Search Users" />
-      <Button fx:id="searchMessagesButton" layoutX="237.0" layoutY="289.0" mnemonicParsing="false" text="Search Messages" />
+      <Button fx:id="postMessageButton" layoutX="248.0" layoutY="138.0" mnemonicParsing="false" text="Post Message" />
+      <Button fx:id="viewMessagesButton" layoutX="215.0" layoutY="187.0" mnemonicParsing="false" text="View MyCircle Messages" />
+      <Button fx:id="viewRequestsButton" layoutX="218.0" layoutY="237.0" mnemonicParsing="false" text="View MyCircle Requests" />
+      <Button fx:id="searchMessagesButton" layoutX="237.0" layoutY="283.0" mnemonicParsing="false" text="Search Messages" />
    </children>
 </AnchorPane>
