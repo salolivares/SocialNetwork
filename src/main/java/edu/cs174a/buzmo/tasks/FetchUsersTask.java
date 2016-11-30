@@ -22,7 +22,10 @@ public class FetchUsersTask extends Task<ObservableList<String>> {
     public FetchUsersTask(String email, String topics, String numMessages, Integer numDays) {
         this.email = email;
         this.topics = topics;
-        this.numMessages = Integer.parseInt(numMessages);
+        if (!numMessages.isEmpty())
+            this.numMessages = Integer.parseInt(numMessages);
+        else
+            this.numMessages = 0;
         this.numDays = numDays;
     }
 
@@ -37,16 +40,27 @@ public class FetchUsersTask extends Task<ObservableList<String>> {
             return result;
         }
 
-        String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = " + "'" + this.email + "'";
         ResultSet rs = null;
 
         try {
-            rs = q.query(sql);
+            if(topics.isEmpty() && numMessages == 0) {
+                String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ?";
+                q.pQuery(sql);
+                q.getPstmt().setString(1, this.email);
+            } else if (numMessages == 0){
+                String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ? " +
+                        "UNION SELECT EMAIL FROM USERTOPICS, TOPICWORDS " +
+                        "WHERE TOPICWORDS.WORD = ? AND TOPICWORDS.TID = USERTOPICS.TID";
+                q.pQuery(sql);
+                q.getPstmt().setString(1, this.email);
+                q.getPstmt().setString(2, this.topics);
+            }
+            rs = q.getPstmt().executeQuery();
             while(rs.next()){
                 String email = rs.getString("email");
                 result.add(email);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             q.close();
