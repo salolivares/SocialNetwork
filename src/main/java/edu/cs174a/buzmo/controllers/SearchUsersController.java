@@ -1,10 +1,7 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
-import edu.cs174a.buzmo.tasks.CreateUserTopicWordTask;
-import edu.cs174a.buzmo.tasks.FetchTopicWordsTask;
-import edu.cs174a.buzmo.tasks.FetchUsersTask;
-import edu.cs174a.buzmo.tasks.RemoveUserTopicWordTask;
+import edu.cs174a.buzmo.tasks.*;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import edu.cs174a.buzmo.util.TopicWord;
 import javafx.application.Platform;
@@ -43,8 +40,31 @@ public class SearchUsersController {
         backButton.setOnAction(this::handleBackAction);
         searchButton.setOnAction(this::handleSearchAction);
         recentChoiceBox.setItems(FXCollections.observableArrayList(
-                1,2,3,4,5,6,7
+                1, 2, 3, 4, 5, 6, 7
         ));
+        addFriendButton.setOnAction(this::handleAddFriendAction);
+    }
+
+    private void handleAddFriendAction(ActionEvent actionEvent) {
+        String email2 = userListField.getSelectionModel().getSelectedItem();
+        if(email2 != null){
+            addFriend(email2);
+        }
+    }
+
+    private void addFriend(String email2) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final AddFriendTask addFriendTask = new AddFriendTask(mainApp.getGUIManager().getEmail(), email2);
+
+        addFriendTask.setOnSucceeded(t -> {
+            Platform.runLater(()->{
+                ps.stopSpinner();
+            });
+        });
+
+        mainApp.getDatabaseExecutor().submit(addFriendTask);
     }
 
     private void handleSearchAction(ActionEvent actionEvent) {
@@ -66,6 +86,8 @@ public class SearchUsersController {
 
         mainApp.getDatabaseExecutor().submit(fetchUsersTask);
     }
+
+
 
     private void handleBackAction(ActionEvent actionEvent) {
         mainApp.getGUIManager().showHomeLayout();
