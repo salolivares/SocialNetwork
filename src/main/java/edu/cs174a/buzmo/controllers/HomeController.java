@@ -14,6 +14,7 @@ public class HomeController {
     @FXML private Label isManagerLabel;
     @FXML private Button logoutButton;
     @FXML private Button topicWordButton;
+    @FXML private Button searchButton;
 
     public HomeController() {
     }
@@ -26,6 +27,7 @@ public class HomeController {
     private void initialize() {
         topicWordButton.setOnAction(this::handleTopicButtonAction);
         logoutButton.setOnAction(this::handleLogoutButtonAction);
+        searchButton.setOnAction(this::handleSearchButtonAction);
     }
 
     private void handleTopicButtonAction(ActionEvent actionEvent) {
@@ -35,6 +37,8 @@ public class HomeController {
     private void handleLogoutButtonAction(ActionEvent actionEvent) {
         mainApp.getGUIManager().logout();
     }
+
+    private void handleSearchButtonAction(ActionEvent actionEvent) { mainApp.getGUIManager().showSearchUsersLayout();}
 
     /**
      * Is called by the main application to give a reference back to itself.
