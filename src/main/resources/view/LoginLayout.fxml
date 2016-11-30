@@ -20,7 +20,7 @@
       </Text>
       <Button fx:id="loginButton" layoutX="194.0" layoutY="237.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="103.0" text="Login" />
       <Button fx:id="closeButton" layoutX="303.0" layoutY="237.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="103.0" text="Close" />
-      <Text layoutX="196.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By Jordan Nyugen and Sal Olivares" />
+      <Text layoutX="196.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By Jordan Nguyen and Sal Olivares" />
       <Button fx:id="createAccountButton" layoutX="243.0" layoutY="281.0" mnemonicParsing="false" text="Create Account" />
    </children>
 </AnchorPane>
