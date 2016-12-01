@@ -4,6 +4,7 @@ import edu.cs174a.buzmo.MainApp;
 import edu.cs174a.buzmo.tasks.FetchFriendsTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,6 +36,7 @@ public class MyCircleMessageController {
     private void initialize() {
         backButton.setOnAction(this::handleBackAction);
         refreshButton.setOnAction(this::handleRefreshAction);
+        addTopicButton.setOnAction(this::handleAddTopicAction);
     }
 
     private void handleBackAction(ActionEvent actionEvent) {
@@ -45,6 +47,14 @@ public class MyCircleMessageController {
         System.out.println("Refreshing...");
         //populateMessages();
         System.out.println("Populated!");
+    }
+
+    private void handleAddTopicAction(ActionEvent actionEvent) {
+        if (topicTextField.getText() != "" && !topicListView.getItems().contains(topicTextField.getText())) {
+            ObservableList<String> newList = topicListView.getItems();
+            newList.add(topicTextField.getText());
+            topicListView.setItems(newList);
+        }
     }
 
 /*
