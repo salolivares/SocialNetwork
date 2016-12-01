@@ -16,6 +16,7 @@ public class HomeController {
     @FXML private Button topicWordButton;
     @FXML private Button searchButton;
     @FXML private Button myCircleButton;
+    @FXML private Button chatGroupButton;
 
     public HomeController() {
     }
@@ -30,6 +31,11 @@ public class HomeController {
         logoutButton.setOnAction(this::handleLogoutButtonAction);
         searchButton.setOnAction(this::handleSearchButtonAction);
         myCircleButton.setOnAction(this::handleMyCircleButton);
+        chatGroupButton.setOnAction(this::handleChatGroupButton);
+    }
+
+    private void handleChatGroupButton(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showChatGroupsLayout();
     }
 
     private void handleMyCircleButton(ActionEvent actionEvent) {

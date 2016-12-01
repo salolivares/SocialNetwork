@@ -5,9 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-/**
- * Created by jordannguyen on 11/30/16.
- */
+
 public class MyCircleController {
     private MainApp mainApp;
     @FXML private Button viewRequestsButton;
