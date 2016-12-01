@@ -4,6 +4,7 @@ package edu.cs174a.buzmo;
 import java.io.IOException;
 
 import edu.cs174a.buzmo.controllers.*;
+import edu.cs174a.buzmo.util.ChatGroup;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -250,6 +251,28 @@ public class GUIManager {
             // Give the controller access to the main app.
             SearchMessagesController controller = loader.getController();
             controller.setMainApp(mainApp);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showChatGroupInviteLayout(ChatGroup chatgroup) {
+        try {
+            // Load Login Layout
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/ChatGroupInviteLayout.fxml"));
+            AnchorPane searchUsersLayout = (AnchorPane) loader.load();
+
+            // Set login layout into the center of root layout.
+            ((BorderPane)mainApp.getRootLayout().getChildren().get(0)).setCenter(searchUsersLayout);
+
+            // Give the controller access to the main app.
+            ChatGroupInviteController controller = loader.getController();
+            controller.setMainApp(mainApp);
+            controller.setChatGroup(chatgroup);
+            controller.updateLabel();
+            controller.refreshFriendsList();
 
         } catch (IOException e) {
             e.printStackTrace();
