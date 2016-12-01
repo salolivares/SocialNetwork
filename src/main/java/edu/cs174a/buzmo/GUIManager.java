@@ -153,6 +153,26 @@ public class GUIManager {
         }
     }
 
+    public void showFriendRequestLayout() {
+        try {
+            // Load Login Layout
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/FriendRequestLayout.fxml"));
+            AnchorPane searchUsersLayout = (AnchorPane) loader.load();
+
+            // Set login layout into the center of root layout.
+            ((BorderPane)mainApp.getRootLayout().getChildren().get(0)).setCenter(searchUsersLayout);
+
+            // Give the controller access to the main app.
+            FriendRequestController controller = loader.getController();
+            controller.setMainApp(mainApp);
+            controller.refreshRequestList();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getEmail() {
         return email;
     }
