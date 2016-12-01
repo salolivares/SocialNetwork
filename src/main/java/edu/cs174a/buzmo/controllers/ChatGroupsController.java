@@ -1,7 +1,9 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
+import edu.cs174a.buzmo.tasks.AcceptUserToChatGroupTask;
 import edu.cs174a.buzmo.tasks.CreateChatGroupTask;
+import edu.cs174a.buzmo.tasks.InviteUserToChatGroupTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -98,8 +100,10 @@ public class ChatGroupsController {
         ps.startSpinner();
 
         final CreateChatGroupTask createChatGroupTask = new CreateChatGroupTask(key, value, mainApp.getGUIManager().getEmail());
+        final InviteUserToChatGroupTask inviteUserToChatGroupTask = new InviteUserToChatGroupTask(key, mainApp.getGUIManager().getEmail());
+        final AcceptUserToChatGroupTask acceptUserToChatGroupTask = new AcceptUserToChatGroupTask(key, mainApp.getGUIManager().getEmail());
 
-        createChatGroupTask.setOnSucceeded(t -> {
+        acceptUserToChatGroupTask.setOnSucceeded(t -> {
             Platform.runLater(()->{
                 ps.stopSpinner();
                 refreshButton.fire();
@@ -107,6 +111,8 @@ public class ChatGroupsController {
         });
 
         mainApp.getDatabaseExecutor().submit(createChatGroupTask);
+        mainApp.getDatabaseExecutor().submit(inviteUserToChatGroupTask);
+        mainApp.getDatabaseExecutor().submit(acceptUserToChatGroupTask);
     }
 
     private void handleBackAction(ActionEvent actionEvent) {
