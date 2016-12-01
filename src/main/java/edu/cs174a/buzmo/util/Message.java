@@ -14,5 +14,5 @@ public class Message {
 
     public String getBody() {return this.body;}
     public String getSender() {return this.sender;}
-    
+
 }
