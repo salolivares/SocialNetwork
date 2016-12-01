@@ -24,7 +24,7 @@ public class AcceptUserToChatGroupTask extends Task<Void> {
         }
 
         try {
-            String sql = "UPDATE GROUPMEMBER SET MEMBER_STATUS = 1 WHERE EMAIL = ? AND GROUP_NAME = ?";
+            String sql = "UPDATE GROUPMEMBER SET MEMBER_STATUS = 1 WHERE EMAIL = ? AND CHATGROUPID = (SELECT chatgroupid FROM CHATGROUPS WHERE GROUP_NAME = ?)";
             q.pQuery(sql);
             q.getPstmt().setString(1, this.email);
             q.getPstmt().setString(2, this.groupName);

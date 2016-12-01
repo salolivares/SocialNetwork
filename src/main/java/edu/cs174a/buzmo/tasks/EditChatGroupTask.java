@@ -5,16 +5,18 @@ import javafx.concurrent.Task;
 
 import java.sql.SQLException;
 
-public class InviteUserToChatGroupTask extends Task<Void> {
+public class EditChatGroupTask extends Task<Void> {
+    private String oldName;
     private String groupName;
-    private String email;
+    private int duration;
 
-    public InviteUserToChatGroupTask(String groupName, String email) {
+    public EditChatGroupTask(String name, String groupName, int duration) {
+        this.oldName = name;
         this.groupName = groupName;
-        this.email = email;
+        this.duration = duration;
     }
 
-    private void inviteUser() {
+    private void editChatGroup() {
         DatabaseQuery q = null;
         try {
             q = new DatabaseQuery();
@@ -24,12 +26,11 @@ public class InviteUserToChatGroupTask extends Task<Void> {
         }
 
         try {
-            String sql = "INSERT INTO SALOLIVARES.GROUPMEMBER(email,chatgroupid,member_status) VALUES (?," +
-                    "(SELECT chatgroupid FROM CHATGROUPS WHERE GROUP_NAME = ?),?)";
+            String sql = "UPDATE CHATGROUPS SET GROUP_NAME = ?, DURATION = ? WHERE GROUP_NAME = ?";
             q.pQuery(sql);
-            q.getPstmt().setString(2, this.groupName);
-            q.getPstmt().setString(1, this.email);
-            q.getPstmt().setInt(3, 0);
+            q.getPstmt().setString(1, this.groupName);
+            q.getPstmt().setInt(2, this.duration);
+            q.getPstmt().setString(3, this.oldName);
             q.getPstmt().executeUpdate();
             q.close();
         } catch (SQLException e) {
@@ -39,7 +40,7 @@ public class InviteUserToChatGroupTask extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        inviteUser();
+        editChatGroup();
         return null;
     }
 }

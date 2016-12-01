@@ -1,9 +1,8 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
-import edu.cs174a.buzmo.tasks.AcceptUserToChatGroupTask;
-import edu.cs174a.buzmo.tasks.CreateChatGroupTask;
-import edu.cs174a.buzmo.tasks.InviteUserToChatGroupTask;
+import edu.cs174a.buzmo.tasks.*;
+import edu.cs174a.buzmo.util.ChatGroup;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -24,19 +23,46 @@ public class ChatGroupsController {
     @FXML private Button chatSettingsButton;
     @FXML private Button createButton;
     @FXML private Button refreshButton;
+    @FXML private ListView<ChatGroup> chatGroupList;
 
     @FXML private void initialize() {
         backButton.setOnAction(this::handleBackAction);
         chatSettingsButton.setOnAction(this::handleChatSettingsAction);
         createButton.setOnAction(this::handleCreateButton);
         refreshButton.setOnAction(this::handleRefreshAction);
+        chatGroupList.setCellFactory(param -> new ListCell<ChatGroup>() {
+            @Override
+            protected void updateItem(ChatGroup item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getGroupName() == null) {
+                    setText(null);
+                } else {
+                    setText(item.getGroupName());
+                }
+            }
+        });
     }
+
+
+
+
     private void handleRefreshAction(ActionEvent actionEvent) {
         populateLists();
     }
 
     private void populateLists() {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
 
+        final FetchChatGroupsTask fetchChatGroupsTask = new FetchChatGroupsTask(mainApp.getGUIManager().getEmail());
+
+        fetchChatGroupsTask.setOnSucceeded(t -> {
+            Platform.runLater(ps::stopSpinner);
+            chatGroupList.setItems(fetchChatGroupsTask.getValue());
+        });
+
+        mainApp.getDatabaseExecutor().submit(fetchChatGroupsTask);
     }
 
 
@@ -119,10 +145,79 @@ public class ChatGroupsController {
         mainApp.getGUIManager().showHomeLayout();
     }
     private void handleChatSettingsAction(ActionEvent actionEvent) {
-
+        ChatGroup chatGroup = chatGroupList.getSelectionModel().getSelectedItem();
+        if(chatGroup != null){
+            if(chatGroup.getOwner().equals(mainApp.getGUIManager().getEmail()))
+                changeChatGroupSettings(chatGroup.getGroupName(), chatGroup.getDuration());
+        }
     }
 
+    private void changeChatGroupSettings(String groupName, int duration) {
+        // Create the custom dialog.
+        Dialog<Pair<String, Integer>> dialog = new Dialog<>();
+        dialog.setTitle("Edit ChatGroup");
+        dialog.setHeaderText("Edit a chat group");
 
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("Update", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        // Create the name and durationOld labels and fields.
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField name = new TextField();
+        name.setText(groupName);
+        TextField durationOld = new TextField();
+        durationOld.setText(String.valueOf(duration));
+
+        grid.add(new Label("Name:"), 0, 0);
+        grid.add(name, 1, 0);
+        grid.add(new Label("Duration"), 0, 1);
+        grid.add(durationOld, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Request focus on the name field by default.
+        Platform.runLater(name::requestFocus);
+
+        // Convert the result to a name-durationOld-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(name.getText(), Integer.parseInt(durationOld.getText()));
+            }
+            return null;
+        });
+
+        Optional<Pair<String, Integer>> result = dialog.showAndWait();
+
+        result.ifPresent(chatGroupSettings -> {
+            System.out.println("Name=" + chatGroupSettings.getKey() + ", Duration=" + chatGroupSettings.getValue());
+            editChatGroupSettings(groupName, chatGroupSettings.getKey(), chatGroupSettings.getValue());
+        });
+    }
+
+    private void editChatGroupSettings(String groupName, String key, Integer value) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final EditChatGroupTask editChatGroupTask = new EditChatGroupTask(groupName, key, value);
+
+        editChatGroupTask.setOnSucceeded(t -> {
+            Platform.runLater(()->{
+                ps.stopSpinner();
+                refreshButton.fire();
+            });
+        });
+
+        mainApp.getDatabaseExecutor().submit(editChatGroupTask);
+    }
+
+    public void refreshList() {
+        refreshButton.fire();
+    }
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
