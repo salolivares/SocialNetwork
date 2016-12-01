@@ -49,7 +49,7 @@ public class PrivateMessageController {
                 if (empty || item == null || item.getBody() == null) {
                     setText(null);
                 } else {
-                    setText(item.getSender() + ": " + item.getBody());
+                    setText("[" + item.getTimestamp().substring(5,19) + "] " + item.getSender() + ": " + item.getBody());
                 }
             }
         });

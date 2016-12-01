@@ -47,7 +47,7 @@ public class FetchPrivateMessageTask extends Task<ObservableList<Message>> {
                     "AND MESSAGES.sender = ? " +
                     "AND PRIVATEMESSAGES.receiver = ? " +
                     "AND PRIVATEMESSAGES.flag = 0 OR PRIVATEMESSAGES.flag = 1) " +
-                    "ORDER BY timestamp DESC";
+                    "ORDER BY timestamp ASC";
             q.pQuery(sql);
             q.getPstmt().setString(1, this.email);
             q.getPstmt().setString(2, this.friend);
@@ -55,7 +55,7 @@ public class FetchPrivateMessageTask extends Task<ObservableList<Message>> {
             q.getPstmt().setString(4, this.email);
             rs = q.getPstmt().executeQuery();
             while(rs.next()){
-                result.add(new Message(rs.getString("sender"), rs.getString("body")));
+                result.add(new Message(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString()));
             }
         } catch (SQLException e) {
             e.printStackTrace();
