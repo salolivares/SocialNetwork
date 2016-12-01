@@ -9,7 +9,7 @@
    <children>
       <Button fx:id="createButton" layoutX="43.0" layoutY="49.0" mnemonicParsing="false" text="Create" />
       <Button fx:id="inviteButton" layoutX="116.0" layoutY="49.0" mnemonicParsing="false" text="Invite" />
-      <Button fx:id="acceptButtin" layoutX="180.0" layoutY="49.0" mnemonicParsing="false" text="Accept" />
+      <Button fx:id="acceptButton" layoutX="180.0" layoutY="49.0" mnemonicParsing="false" text="Accept" />
       <Button fx:id="chatSettingsButton" layoutX="433.0" layoutY="49.0" mnemonicParsing="false" text="ChatGroup Settings" />
       <ListView fx:id="messageList" layoutX="28.0" layoutY="198.0" prefHeight="240.0" prefWidth="545.0" />
       <ListView fx:id="chatGroupList" layoutX="28.0" layoutY="84.0" prefHeight="97.0" prefWidth="545.0" />
