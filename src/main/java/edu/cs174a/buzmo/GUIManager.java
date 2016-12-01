@@ -236,4 +236,23 @@ public class GUIManager {
             e.printStackTrace();
         }
     }
+
+    public void showSearchMessagesLayout() {
+        try {
+            // Load Login Layout
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/SearchMessagesLayout.fxml"));
+            AnchorPane searchUsersLayout = (AnchorPane) loader.load();
+
+            // Set login layout into the center of root layout.
+            ((BorderPane)mainApp.getRootLayout().getChildren().get(0)).setCenter(searchUsersLayout);
+
+            // Give the controller access to the main app.
+            SearchMessagesController controller = loader.getController();
+            controller.setMainApp(mainApp);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
