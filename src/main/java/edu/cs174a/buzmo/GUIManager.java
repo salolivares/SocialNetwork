@@ -215,4 +215,24 @@ public class GUIManager {
             e.printStackTrace();
         }
     }
+
+    public void showMyCircleMessageLayout() {
+        try {
+            // Load Login Layout
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/MyCircleMessageLayout.fxml"));
+            AnchorPane searchUsersLayout = (AnchorPane) loader.load();
+
+            // Set login layout into the center of root layout.
+            ((BorderPane)mainApp.getRootLayout().getChildren().get(0)).setCenter(searchUsersLayout);
+
+            // Give the controller access to the main app.
+            MyCircleMessageController controller = loader.getController();
+            controller.setMainApp(mainApp);
+//            controller.refreshMessages();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

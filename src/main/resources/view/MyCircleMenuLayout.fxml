@@ -13,7 +13,6 @@
          </font>
       </Label>
       <Button fx:id="backButton" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" text="&lt; Back" />
-      <Button fx:id="postMessageButton" layoutX="248.0" layoutY="138.0" mnemonicParsing="false" text="Post Message" />
       <Button fx:id="viewMessagesButton" layoutX="215.0" layoutY="187.0" mnemonicParsing="false" text="View MyCircle Messages" />
       <Button fx:id="viewRequestsButton" layoutX="218.0" layoutY="237.0" mnemonicParsing="false" text="View MyCircle Requests" />
       <Button fx:id="searchMessagesButton" layoutX="237.0" layoutY="283.0" mnemonicParsing="false" text="Search Messages" />
