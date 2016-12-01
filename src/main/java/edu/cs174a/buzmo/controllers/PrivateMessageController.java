@@ -3,6 +3,7 @@ package edu.cs174a.buzmo.controllers;
 import edu.cs174a.buzmo.MainApp;
 import edu.cs174a.buzmo.tasks.AcceptFriendTask;
 import edu.cs174a.buzmo.tasks.FetchFriendRequestsTask;
+import edu.cs174a.buzmo.tasks.FetchFriendsTask;
 import edu.cs174a.buzmo.tasks.RejectFriendTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
@@ -39,31 +40,31 @@ public class PrivateMessageController {
 
     private void handleRefreshAction(ActionEvent actionEvent) {
         System.out.println("Refreshing...");
-//        populateMessageList();
+        populateFriendList();
         System.out.println("Populated!");
     }
 
 
-//    private void populateMessageList() {
-//        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
-//        ps.startSpinner();
-//
-//        final FetchFriendRequestsTask fetchFriendRequests = new FetchFriendRequestsTask(mainApp.getGUIManager().getEmail());
-//
-//        fetchFriendRequests.setOnSucceeded(t -> {
-//            Platform.runLater(ps::stopSpinner);
-//            requestsListView.setItems(fetchFriendRequests.getValue());
-//        });
-//
-//        fetchFriendRequests.setOnFailed(t -> {
-//            Platform.runLater(ps::stopSpinner);
-//            System.out.println("FAILED");
-//        });
-//
-//        mainApp.getDatabaseExecutor().submit(fetchFriendRequests);
-//    }
+    private void populateFriendList() {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
 
-    public void refreshRequestList(){
+        final FetchFriendsTask fetchFriends = new FetchFriendsTask(mainApp.getGUIManager().getEmail());
+
+        fetchFriends.setOnSucceeded(t -> {
+            Platform.runLater(ps::stopSpinner);
+            friendsList.setItems(fetchFriends.getValue());
+        });
+
+        fetchFriends.setOnFailed(t -> {
+            Platform.runLater(ps::stopSpinner);
+            System.out.println("FAILED");
+        });
+
+        mainApp.getDatabaseExecutor().submit(fetchFriends);
+    }
+
+    public void refreshFriendsList(){
         refreshButton.fire();
     }
 
