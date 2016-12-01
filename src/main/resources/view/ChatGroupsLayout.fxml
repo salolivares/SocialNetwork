@@ -5,7 +5,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.cs174a.buzmo.controllers.ChatGroupsController">
    <children>
       <Button fx:id="createButton" layoutX="43.0" layoutY="49.0" mnemonicParsing="false" text="Create" />
@@ -18,5 +17,6 @@
       <TextField fx:id="messageTextField" layoutX="28.0" layoutY="449.0" prefHeight="27.0" prefWidth="300.0" promptText="Enter A Message" />
       <Button fx:id="deleteMessage" layoutX="468.0" layoutY="449.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="105.0" text="Delete" />
       <Button fx:id="backButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="&lt; Back" />
+      <Button fx:id="refreshButton" layoutX="299.0" layoutY="49.0" mnemonicParsing="false" text="Refresh" />
    </children>
 </AnchorPane>
