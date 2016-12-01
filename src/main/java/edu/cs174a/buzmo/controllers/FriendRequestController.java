@@ -1,8 +1,10 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
+import edu.cs174a.buzmo.tasks.AcceptFriendTask;
 import edu.cs174a.buzmo.tasks.FetchFriendRequestsTask;
 import edu.cs174a.buzmo.tasks.FetchTopicWordsTask;
+import edu.cs174a.buzmo.tasks.RemoveUserTopicWordTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import edu.cs174a.buzmo.util.TopicWord;
 import javafx.application.Platform;
@@ -30,12 +32,36 @@ public class FriendRequestController {
     @FXML
     private void initialize() {
         refreshButton.setOnAction(this::handleRefreshAction);
+        acceptButton.setOnAction(this::handleAcceptAction);
     }
 
     private void handleRefreshAction(ActionEvent actionEvent) {
         System.out.println("Refreshing...");
         populateRequestList();
         System.out.println("Populated!");
+    }
+
+    private void handleAcceptAction(ActionEvent actionEvent) {
+        String email = requestsListView.getSelectionModel().getSelectedItem();
+        if(email != null){
+            acceptFriend(email);
+        }
+    }
+
+    private void acceptFriend(String email) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final AcceptFriendTask acceptFriend = new AcceptFriendTask(mainApp.getGUIManager().getEmail(), email);
+
+        acceptFriend.setOnSucceeded(t -> {
+            Platform.runLater(() -> {
+                ps.stopSpinner();
+                refreshButton.fire();
+            });
+        });
+
+        mainApp.getDatabaseExecutor().submit(acceptFriend);
     }
 
     private void populateRequestList() {
