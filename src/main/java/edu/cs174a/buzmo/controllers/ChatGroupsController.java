@@ -23,6 +23,7 @@ public class ChatGroupsController {
     @FXML private Button chatSettingsButton;
     @FXML private Button createButton;
     @FXML private Button refreshButton;
+    @FXML private Button acceptButton;
     @FXML private ListView<ChatGroup> chatGroupList;
 
     @FXML private void initialize() {
@@ -30,6 +31,7 @@ public class ChatGroupsController {
         chatSettingsButton.setOnAction(this::handleChatSettingsAction);
         createButton.setOnAction(this::handleCreateButton);
         refreshButton.setOnAction(this::handleRefreshAction);
+        acceptButton.setOnAction(this::handleAcceptAction);
         chatGroupList.setCellFactory(param -> new ListCell<ChatGroup>() {
             @Override
             protected void updateItem(ChatGroup item, boolean empty) {
@@ -38,7 +40,7 @@ public class ChatGroupsController {
                 if (empty || item == null || item.getGroupName() == null) {
                     setText(null);
                 } else if (item.getMemberStatus() == 0){
-                    setText(item.getGroupName() + " (INVITE RECIEVED FROM THIS GROUP");
+                    setText(item.getGroupName() + " (INVITE RECIEVED FROM THIS GROUP)");
                 } else{
                     setText(item.getGroupName());
                 }
@@ -65,6 +67,22 @@ public class ChatGroupsController {
         });
 
         mainApp.getDatabaseExecutor().submit(fetchChatGroupsTask);
+    }
+
+    private void handleAcceptAction(ActionEvent actionEvent) {
+        ChatGroup chatGroup = chatGroupList.getSelectionModel().getSelectedItem();
+        if(chatGroup != null) {
+            if (chatGroup.getMemberStatus() == 0) {
+                final AcceptUserToChatGroupTask acceptUser = new AcceptUserToChatGroupTask(chatGroup.getGroupName(), mainApp.getGUIManager().getEmail());
+                acceptUser.setOnSucceeded(t -> {
+                    Platform.runLater(() -> {
+                        refreshButton.fire();
+                    });
+                });
+
+                mainApp.getDatabaseExecutor().submit(acceptUser);
+            }
+        }
     }
 
 
