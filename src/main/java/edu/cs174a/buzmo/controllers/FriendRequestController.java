@@ -1,10 +1,7 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
-import edu.cs174a.buzmo.tasks.AcceptFriendTask;
-import edu.cs174a.buzmo.tasks.FetchFriendRequestsTask;
-import edu.cs174a.buzmo.tasks.FetchTopicWordsTask;
-import edu.cs174a.buzmo.tasks.RemoveUserTopicWordTask;
+import edu.cs174a.buzmo.tasks.*;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import edu.cs174a.buzmo.util.TopicWord;
 import javafx.application.Platform;
@@ -13,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+import javax.swing.*;
 
 /**
  * Created by jordannguyen on 11/30/16.
@@ -31,8 +30,14 @@ public class FriendRequestController {
 
     @FXML
     private void initialize() {
+        backButton.setOnAction(this::handleBackAction);
         refreshButton.setOnAction(this::handleRefreshAction);
         acceptButton.setOnAction(this::handleAcceptAction);
+        rejectButton.setOnAction(this::handleRejectAction);
+    }
+
+    private void handleBackAction(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showMyCircleMenuLayout();
     }
 
     private void handleRefreshAction(ActionEvent actionEvent) {
@@ -62,6 +67,29 @@ public class FriendRequestController {
         });
 
         mainApp.getDatabaseExecutor().submit(acceptFriend);
+    }
+
+    private void handleRejectAction(ActionEvent actionEvent) {
+        String email = requestsListView.getSelectionModel().getSelectedItem();
+        if(email != null){
+            rejectFriend(email);
+        }
+    }
+
+    private void rejectFriend(String email) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final RejectFriendTask rejectFriend = new RejectFriendTask(email, mainApp.getGUIManager().getEmail());
+
+        rejectFriend.setOnSucceeded(t -> {
+            Platform.runLater(() -> {
+                ps.stopSpinner();
+                refreshButton.fire();
+            });
+        });
+
+        mainApp.getDatabaseExecutor().submit(rejectFriend);
     }
 
     private void populateRequestList() {

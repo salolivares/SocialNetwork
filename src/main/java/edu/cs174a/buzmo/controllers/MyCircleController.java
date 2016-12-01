@@ -9,10 +9,16 @@ import javafx.scene.control.*;
 public class MyCircleController {
     private MainApp mainApp;
     @FXML private Button viewRequestsButton;
+    @FXML private Button backButton;
 
 
     @FXML private void initialize() {
         viewRequestsButton.setOnAction(this::handleViewRequestsAction);
+        backButton.setOnAction(this::handleBackAction);
+    }
+
+    private void handleBackAction(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showHomeLayout();
     }
 
     private void handleViewRequestsAction(ActionEvent actionEvent) {
