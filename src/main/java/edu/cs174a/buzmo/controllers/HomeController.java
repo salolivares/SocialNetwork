@@ -17,6 +17,7 @@ public class HomeController {
     @FXML private Button searchButton;
     @FXML private Button myCircleButton;
     @FXML private Button chatGroupButton;
+    @FXML private Button privateMessageButton;
 
     public HomeController() {
     }
@@ -32,6 +33,7 @@ public class HomeController {
         searchButton.setOnAction(this::handleSearchButtonAction);
         myCircleButton.setOnAction(this::handleMyCircleButton);
         chatGroupButton.setOnAction(this::handleChatGroupButton);
+        privateMessageButton.setOnAction(this::handlePrivateMessageButton);
     }
 
     private void handleChatGroupButton(ActionEvent actionEvent) {
@@ -51,6 +53,8 @@ public class HomeController {
     }
 
     private void handleSearchButtonAction(ActionEvent actionEvent) { mainApp.getGUIManager().showSearchUsersLayout();}
+
+    private void handlePrivateMessageButton(ActionEvent actionEvent) { mainApp.getGUIManager().showPrivateMessageLayout(); }
 
     /**
      * Is called by the main application to give a reference back to itself.
