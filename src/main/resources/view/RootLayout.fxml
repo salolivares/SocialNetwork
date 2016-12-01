@@ -19,7 +19,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
+                    <MenuItem fx:id="editTimeMenuItem" mnemonicParsing="false" text="Edit Time" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

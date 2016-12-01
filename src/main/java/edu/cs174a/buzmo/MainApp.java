@@ -1,10 +1,15 @@
 package edu.cs174a.buzmo;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import edu.cs174a.buzmo.tasks.UpdateDBTimeTask;
 import edu.cs174a.buzmo.util.Database;
 import edu.cs174a.buzmo.util.DatabaseThreadFactory;
 import javafx.application.Application;
@@ -19,6 +24,11 @@ public class MainApp extends Application {
     private StackPane rootLayout;
     private GUIManager GUIManager;
     private Database databaseConnection;
+
+    private Instant startTime;
+
+    private LocalTime globalTime;
+    private LocalDate globalDate;
 
     // executes database operations concurrent to JavaFX operations.
     private ExecutorService databaseExecutor;
@@ -44,17 +54,20 @@ public class MainApp extends Application {
 
         initRootLayout();
         GUIManager.showLoginScreen();
+
+        startTime = Instant.now();
+
     }
 
     @Override
     public void stop() throws Exception {
         databaseExecutor.shutdown();
-        if (!databaseExecutor.awaitTermination(4, TimeUnit.SECONDS)) {
+        if (!databaseExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
             System.out.println("Database execution thread timed out.");
         }
         Database.getInstance().closeConnection();
-        System.out.println("Application is exiting...");
-    }
+        System.out.println("Application is exiting...");    }
+
 
     /**
      * Initializes the root layout.
@@ -88,6 +101,26 @@ public class MainApp extends Application {
 
     public GUIManager getGUIManager() {
         return GUIManager;
+    }
+
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getGlobalTime() {
+        return globalTime;
+    }
+
+    public void setGlobalTime(LocalTime globalTime) {
+        this.globalTime = globalTime;
+    }
+
+    public LocalDate getGlobalDate() {
+        return globalDate;
+    }
+
+    public void setGlobalDate(LocalDate globalDate) {
+        this.globalDate = globalDate;
     }
 
     public ExecutorService getDatabaseExecutor() {

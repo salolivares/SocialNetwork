@@ -4,6 +4,7 @@ package edu.cs174a.buzmo;
 import java.io.IOException;
 
 import edu.cs174a.buzmo.controllers.*;
+import edu.cs174a.buzmo.util.ChatGroup;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -71,6 +72,7 @@ public class GUIManager {
             HomeController controller = loader.getController();
             controller.setMainApp(mainApp);
             controller.setEmail(this.email);
+            controller.setNewTime();
         } catch (IOException e) {
             e.printStackTrace();
         }

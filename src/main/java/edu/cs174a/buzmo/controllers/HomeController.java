@@ -1,10 +1,16 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
+import edu.cs174a.buzmo.tasks.FetchDBTask;
+import edu.cs174a.buzmo.tasks.UpdateDBTimeTask;
+import edu.cs174a.buzmo.util.ProgressSpinner;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+
+import java.time.*;
+import java.util.Optional;
 
 public class HomeController {
     private MainApp mainApp;
@@ -18,6 +24,9 @@ public class HomeController {
     @FXML private Button myCircleButton;
     @FXML private Button chatGroupButton;
     @FXML private Button privateMessageButton;
+    @FXML private DatePicker datePicker;
+    @FXML private Button setTimeButton;
+    @FXML private TextField timeTextField;
 
     public HomeController() {
     }
@@ -34,6 +43,27 @@ public class HomeController {
         myCircleButton.setOnAction(this::handleMyCircleButton);
         chatGroupButton.setOnAction(this::handleChatGroupButton);
         privateMessageButton.setOnAction(this::handlePrivateMessageButton);
+        setTimeButton.setOnAction(this::handleSetTime);
+    }
+
+    private void handleSetTime(ActionEvent actionEvent) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        LocalTime time = LocalTime.parse(timeTextField.getText());
+        LocalDate date = datePicker.getValue();
+
+        final UpdateDBTimeTask updateDBTimeTask = new UpdateDBTimeTask(date.toString(), time.toString());
+
+        updateDBTimeTask.setOnSucceeded(t->{
+
+            Platform.runLater(ps::stopSpinner);
+            mainApp.setGlobalDate(date);
+            mainApp.setGlobalTime(time);
+        });
+
+        mainApp.getDatabaseExecutor().submit(updateDBTimeTask);
+
     }
 
     private void handleChatGroupButton(ActionEvent actionEvent) {
@@ -49,6 +79,17 @@ public class HomeController {
     }
 
     private void handleLogoutButtonAction(ActionEvent actionEvent) {
+        // Save time to database
+
+        Duration timeElapsed = Duration.between(mainApp.getStartTime(), Instant.now());
+
+        LocalTime time = mainApp.getGlobalTime().plusMinutes(timeElapsed.toMinutes());
+
+        // WRITE NEW TIME TO DATABASE
+        final UpdateDBTimeTask updateDBTimeTask = new UpdateDBTimeTask(mainApp.getGlobalDate().toString(), time.toString());
+
+        mainApp.getDatabaseExecutor().submit(updateDBTimeTask);
+
         mainApp.getGUIManager().logout();
     }
 
@@ -67,5 +108,27 @@ public class HomeController {
     public void setEmail(String email) {
         this.email = email;
         loggedinLabel.setText("Logged in: " + email);
+    }
+
+    public void setNewTime(){
+        // GET TIME FROM DATABASE
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final FetchDBTask fetchDBTask = new FetchDBTask();
+
+        fetchDBTask.setOnSucceeded(t -> {
+            Platform.runLater(ps::stopSpinner);
+
+            String[] dataTime = fetchDBTask.getValue();
+
+            LocalDate date = LocalDate.parse(dataTime[0]);
+            LocalTime time = LocalTime.parse(dataTime[1]);
+
+            mainApp.setGlobalDate(date);
+            mainApp.setGlobalTime(time);
+        });
+
+        mainApp.getDatabaseExecutor().submit(fetchDBTask);
     }
 }
