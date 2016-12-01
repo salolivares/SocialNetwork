@@ -11,12 +11,14 @@ public class MyCircleController {
     @FXML private Button viewRequestsButton;
     @FXML private Button backButton;
     @FXML private Button viewMessagesButton;
+    @FXML private Button searchMessagesButton;
 
 
     @FXML private void initialize() {
         viewRequestsButton.setOnAction(this::handleViewRequestsAction);
         backButton.setOnAction(this::handleBackAction);
         viewMessagesButton.setOnAction(this::handleMessagesAction);
+        searchMessagesButton.setOnAction(this::handleSearchAction);
     }
 
     private void handleBackAction(ActionEvent actionEvent) {
@@ -29,6 +31,10 @@ public class MyCircleController {
 
     private void handleMessagesAction(ActionEvent actionEvent) {
         mainApp.getGUIManager().showMyCircleMessageLayout();
+    }
+
+    private void handleSearchAction(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showSearchMessagesLayout();
     }
 
     public void setMainApp(MainApp mainApp) {
