@@ -1,6 +1,7 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
+import edu.cs174a.buzmo.tasks.CreateTopicTask;
 import edu.cs174a.buzmo.tasks.FetchFriendsTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
@@ -54,6 +55,9 @@ public class MyCircleMessageController {
             ObservableList<String> newList = topicListView.getItems();
             newList.add(topicTextField.getText());
             topicListView.setItems(newList);
+
+            final CreateTopicTask createTopic = new CreateTopicTask(topicTextField.getText());
+            mainApp.getDatabaseExecutor().submit(createTopic);
         }
     }
 
