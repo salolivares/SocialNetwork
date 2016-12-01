@@ -44,7 +44,8 @@ public class FetchChatGroupsTask extends Task<ObservableList<ChatGroup>> {
                 String groupName = rs.getString("group_name");
                 int duration = rs.getInt("duration");
                 String owner = rs.getString("owner");
-                result.add(new ChatGroup(groupName, duration, owner));
+                int memberStatus = rs.getInt("member_status");
+                result.add(new ChatGroup(groupName, duration, owner, memberStatus));
             }
         } catch (SQLException e) {
             e.printStackTrace();

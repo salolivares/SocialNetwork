@@ -37,7 +37,9 @@ public class ChatGroupsController {
 
                 if (empty || item == null || item.getGroupName() == null) {
                     setText(null);
-                } else {
+                } else if (item.getMemberStatus() == 0){
+                    setText(item.getGroupName() + " (INVITE RECIEVED FROM THIS GROUP");
+                } else{
                     setText(item.getGroupName());
                 }
             }

@@ -24,7 +24,6 @@ public class Database {
     }
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
-        System.out.println("Attempting to open connect to DB");
         if(connection == null || connection.isClosed()) {
             Class.forName(JDBC_DRIVER);
             connection =  DriverManager.getConnection(DB_URL, USER, PASS);
