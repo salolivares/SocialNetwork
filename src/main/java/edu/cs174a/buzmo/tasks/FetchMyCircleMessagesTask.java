@@ -48,12 +48,22 @@ public class FetchMyCircleMessagesTask extends Task<ObservableList<Message>> {
                     "SELECT MESSAGES.* FROM MESSAGES, MYCIRCLEMESSAGES " +
                     "WHERE MESSAGES.MID = MYCIRCLEMESSAGES.MID " +
                     "AND MESSAGES.SENDER = ? " +
+                    "UNION " +
+                    "SELECT MESSAGES.* FROM MESSAGES, WALLPOSTS " +
+                    "WHERE MESSAGES.MID = WALLPOSTS.MID " +
+                    "AND WALLPOSTS.RECEIVER = ? " +
+                    "UNION " +
+                    "SELECT MESSAGES.* FROM MESSAGES, WALLPOSTS " +
+                    "WHERE MESSAGES.MID = WALLPOSTS.MID " +
+                    "AND MESSAGES.SENDER = ?" +
                     ")" +
                     "ORDER BY TIMESTAMP DESC ";
             q.pQuery(sql);
             q.getPstmt().setString(1, this.email);
             q.getPstmt().setString(2, this.email);
             q.getPstmt().setString(3, this.email);
+            q.getPstmt().setString(4, this.email);
+            q.getPstmt().setString(5, this.email);
             rs = q.getPstmt().executeQuery();
             while(rs.next()){
                 result.add(new Message(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString()));

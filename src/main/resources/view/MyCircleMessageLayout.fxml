@@ -16,15 +16,16 @@
          </font>
       </Label>
       <Button fx:id="backButton" layoutX="24.0" layoutY="26.0" mnemonicParsing="false" text="&lt; Back" />
-      <ListView fx:id="messageList" layoutX="25.0" layoutY="66.0" prefHeight="202.0" prefWidth="550.0" />
-      <TextField fx:id="messageField" layoutX="25.0" layoutY="278.0" prefHeight="71.0" prefWidth="550.0" promptText="Enter a message..." />
-      <ChoiceBox fx:id="publicChoiceBox" layoutX="93.0" layoutY="362.0" prefWidth="150.0" />
-      <Button fx:id="sendButton" layoutX="30.0" layoutY="362.0" mnemonicParsing="false" text="Send" />
-      <Button fx:id="deleteButton" layoutX="255.0" layoutY="362.0" mnemonicParsing="false" text="Delete" />
-      <TextField fx:id="topicTextField" layoutX="133.0" layoutY="447.0" promptText="Enter a topic word" />
-      <ListView fx:id="topicListView" layoutX="328.0" layoutY="393.0" prefHeight="93.0" prefWidth="258.0" />
-      <Button fx:id="addTopicButton" layoutX="25.0" layoutY="447.0" mnemonicParsing="false" text="Add Topic" />
-      <Label layoutX="418.0" layoutY="367.0" text="Topic Words" />
+      <ListView fx:id="messageList" layoutX="25.0" layoutY="66.0" prefHeight="158.0" prefWidth="550.0" />
+      <TextField fx:id="messageField" layoutX="25.0" layoutY="244.0" prefHeight="71.0" prefWidth="550.0" promptText="Enter a message..." />
+      <ChoiceBox fx:id="publicChoiceBox" layoutX="88.0" layoutY="326.0" prefWidth="150.0" />
+      <Button fx:id="sendButton" layoutX="25.0" layoutY="326.0" mnemonicParsing="false" text="Send" />
+      <Button fx:id="deleteButton" layoutX="250.0" layoutY="326.0" mnemonicParsing="false" text="Delete" />
+      <TextField fx:id="topicTextField" layoutX="121.0" layoutY="371.0" promptText="Enter a topic word" />
+      <ListView fx:id="topicListView" layoutX="50.0" layoutY="409.0" prefHeight="71.0" prefWidth="215.0" />
+      <Button fx:id="addTopicButton" layoutX="24.0" layoutY="371.0" mnemonicParsing="false" text="Add Topic" />
       <Button fx:id="refreshButton" layoutX="509.0" layoutY="27.0" mnemonicParsing="false" text="Refresh" />
+      <ListView fx:id="addFriendList" layoutX="327.0" layoutY="376.0" prefHeight="104.0" prefWidth="215.0" />
+      <Label layoutX="340.0" layoutY="356.0" text="Select Friends to Send To" />
    </children>
 </AnchorPane>

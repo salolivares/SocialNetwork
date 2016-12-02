@@ -32,6 +32,8 @@ public class MyCircleMessageController {
     @FXML private TextField topicTextField;
     @FXML private TextField messageField;
 
+    @FXML private ListView<String> addFriendList;
+
     public MyCircleMessageController() {
 
     }
@@ -57,6 +59,14 @@ public class MyCircleMessageController {
         publicChoiceBox.setItems(FXCollections.observableArrayList(
                 "Public Message", "Private Message"
         ));
+
+        addFriendList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        addFriendList.setOnMouseClicked(event -> {
+            ObservableList<String> selectedItems =  addFriendList.getSelectionModel().getSelectedItems();
+            for(String s : selectedItems){
+                System.out.println("selected item " + s);
+            }
+        });
     }
 
     private void handleBackAction(ActionEvent actionEvent) {
@@ -66,9 +76,28 @@ public class MyCircleMessageController {
     private void handleRefreshAction(ActionEvent actionEvent) {
         System.out.println("Refreshing...");
         populateMessages();
+        populateFriendList();
         System.out.println("Populated!");
     }
 
+    private void populateFriendList() {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final FetchFriendsTask fetchFriends = new FetchFriendsTask(mainApp.getGUIManager().getEmail());
+
+        fetchFriends.setOnSucceeded(t -> {
+            Platform.runLater(ps::stopSpinner);
+            addFriendList.setItems(fetchFriends.getValue());
+        });
+
+        fetchFriends.setOnFailed(t -> {
+            Platform.runLater(ps::stopSpinner);
+            System.out.println("FAILED");
+        });
+
+        mainApp.getDatabaseExecutor().submit(fetchFriends);
+    }
     private void handleAddTopicAction(ActionEvent actionEvent) {
         if (topicTextField.getText() != "" && !topicListView.getItems().contains(topicTextField.getText())) {
             ObservableList<String> newList = topicListView.getItems();
@@ -81,11 +110,46 @@ public class MyCircleMessageController {
     }
 
     private void handleSendAction(ActionEvent actionEvent) {
-        sendMessage();
+        if(addFriendList.getSelectionModel().getSelectedItems().isEmpty()){
+            sendGlobalMessage();
+        } else {
+            sendFriendMessage();
+        }
         populateMessages();
     }
 
-    private void sendMessage() {
+    private void sendFriendMessage() {
+        ObservableList<String> friendsToSendTo = addFriendList.getSelectionModel().getSelectedItems();
+
+        if (messageField.getText() != null && !topicListView.getItems().isEmpty()) {
+            ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+            ps.startSpinner();
+
+
+            Duration timeElapsed = Duration.between(mainApp.getStartTime(), Instant.now());
+            LocalTime time = mainApp.getGlobalTime().plusMinutes(timeElapsed.toMinutes());
+            LocalDate date = mainApp.getGlobalDate();
+
+            String timestamp = date.toString() + " " + time.toString();
+
+            final SendFriendMyCircleMessageTask send = new SendFriendMyCircleMessageTask(mainApp.getGUIManager().getEmail(),
+                    messageField.getText(), timestamp, 1,topicListView.getItems(), friendsToSendTo);
+
+            send.setOnSucceeded(t -> {
+                Platform.runLater(ps::stopSpinner);
+            });
+
+            send.setOnFailed(t -> {
+                Platform.runLater(ps::stopSpinner);
+                System.out.println("FAILED");
+            });
+
+            messageField.clear();
+            mainApp.getDatabaseExecutor().submit(send);
+        }
+    }
+
+    private void sendGlobalMessage() {
         String publicChoice = publicChoiceBox.getSelectionModel().getSelectedItem();
 
         if (messageField.getText() != null && publicChoice != null && !topicListView.getItems().isEmpty()) {
