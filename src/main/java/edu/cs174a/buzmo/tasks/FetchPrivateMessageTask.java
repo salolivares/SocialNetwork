@@ -67,8 +67,49 @@ public class FetchPrivateMessageTask extends Task<ObservableList<Message>> {
         return result;
     }
 
+    private void updateNumRead() {
+        DatabaseQuery q = null;
+
+        try {
+            q = new DatabaseQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            String sql = "UPDATE MESSAGES SET num_read = num_read+1 WHERE MID IN (" +
+                    "SELECT MID FROM " +
+                    "(SELECT MESSAGES.* FROM MESSAGES, PRIVATEMESSAGES " +
+                    "WHERE MESSAGES.mid = PRIVATEMESSAGES.mid " +
+                    "AND MESSAGES.sender = ? " +
+                    "AND PRIVATEMESSAGES.receiver = ? " +
+                    "AND (PRIVATEMESSAGES.flag = 0 OR PRIVATEMESSAGES.flag = 2) " +
+                    "UNION " +
+                    "SELECT MESSAGES.* FROM MESSAGES, PRIVATEMESSAGES " +
+                    "WHERE MESSAGES.mid = PRIVATEMESSAGES.mid " +
+                    "AND MESSAGES.sender = ? " +
+                    "AND PRIVATEMESSAGES.receiver = ? " +
+                    "AND (PRIVATEMESSAGES.flag = 0 OR PRIVATEMESSAGES.flag = 1)))";
+            q.pQuery(sql);
+            q.getPstmt().setString(1, this.email);
+            q.getPstmt().setString(2, this.friend);
+            q.getPstmt().setString(3, this.friend);
+            q.getPstmt().setString(4, this.email);
+            q.getPstmt().executeUpdate();
+            q.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            q.close();
+        }
+
+        return;
+    }
+
     @Override
     protected ObservableList<Message> call() throws Exception {
+        updateNumRead();
         return fetchPrivateMessages();
     }
 }
