@@ -15,6 +15,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 
 
@@ -55,6 +59,19 @@ public class ChatGroupsController {
             }
         });
         chatGroupList.setOnMouseClicked(this::handleChatGroupClick);
+
+        messageList.setCellFactory(param -> new ListCell<Message>() {
+            @Override
+            protected void updateItem(Message item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getBody() == null) {
+                    setText(null);
+                } else {
+                    setText("[" + item.getTimestamp().substring(5,19) + "] " + item.getSender() + ": " + item.getBody());
+                }
+            }
+        });
     }
 
     private void handleSendButton(ActionEvent actionEvent) {
@@ -65,7 +82,27 @@ public class ChatGroupsController {
     }
 
     private void sendChatGroupMessage(ChatGroup selectedItem) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        Duration timeElapsed = Duration.between(mainApp.getStartTime(), Instant.now());
+        LocalTime time = mainApp.getGlobalTime().plusMinutes(timeElapsed.toMinutes());
+        LocalDate date = mainApp.getGlobalDate();
+
+        String timestamp = date.toString() + " " + time.toString();
+
+        final SendChatGroupMessageTask sendChatGroupMessageTask = new SendChatGroupMessageTask(mainApp.getGUIManager().getEmail(), selectedItem.getGroupName(), messageTextField.getText(), timestamp, 1);
         
+        sendChatGroupMessageTask.setOnSucceeded(t->{
+            Platform.runLater(ps::stopSpinner);
+        });
+
+        sendChatGroupMessageTask.setOnFailed(t->{
+            Platform.runLater(ps::stopSpinner);
+            System.out.println("FAILED");
+        });
+
+        mainApp.getDatabaseExecutor().submit(sendChatGroupMessageTask);
     }
 
     private void handleChatGroupClick(MouseEvent mouseEvent) {
