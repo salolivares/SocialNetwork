@@ -84,12 +84,6 @@ public class FetchUsersTask extends Task<ObservableList<String>> {
                     q.getPstmt().setString(4, this.user);
                     q.getPstmt().setString(5, this.email);
                 } else {
-//                    String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ? " +
-//                            "UNION SELECT EMAIL FROM USERTOPICS, TOPICWORDS, FRIENDS " +
-//                            "WHERE TOPICWORDS.WORD = ? AND TOPICWORDS.TID = USERTOPICS.TID AND EMAIL != ? AND " +
-//                            "((FRIENDS.EMAIL1 = ? AND FRIENDS.EMAIL2 = ?) " +
-//                            "OR (FRIENDS.EMAIL1 = ? AND FRIENDS.EMAIL2 = ?))";
-
                     String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ? " +
                             "UNION SELECT EMAIL1 FROM FRIENDS, USERTOPICS, TOPICWORDS " +
                             "WHERE EMAIL1 = USERTOPICS.EMAIL AND TOPICWORDS.WORD = ? AND TOPICWORDS.TID = USERTOPICS.TID AND EMAIL2 = ? " +
@@ -101,8 +95,6 @@ public class FetchUsersTask extends Task<ObservableList<String>> {
                     q.getPstmt().setString(3, this.user);
                     q.getPstmt().setString(4, this.topics);
                     q.getPstmt().setString(5, this.user);
-//                    q.getPstmt().setString(6, this.email);
-//                    q.getPstmt().setString(7, this.user);
 
                 }
                 rs = q.getPstmt().executeQuery();
