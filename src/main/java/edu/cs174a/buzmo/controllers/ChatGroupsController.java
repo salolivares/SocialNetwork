@@ -119,7 +119,7 @@ public class ChatGroupsController {
             ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
             ps.startSpinner();
 
-            final FetchChatGroupMessageTask fetchChatGroupMessageTask = new FetchChatGroupMessageTask(selectedItem.getGroupName());
+            final FetchChatGroupMessageTask fetchChatGroupMessageTask = new FetchChatGroupMessageTask(selectedItem.getGroupName(), selectedItem.getDuration(), mainApp.getGlobalDate());
 
             fetchChatGroupMessageTask.setOnSucceeded(t -> {
                 Platform.runLater(ps::stopSpinner);

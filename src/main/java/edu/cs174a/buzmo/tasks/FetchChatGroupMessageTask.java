@@ -8,12 +8,19 @@ import javafx.concurrent.Task;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class FetchChatGroupMessageTask extends Task<ObservableList<Message>> {
     private String groupName;
+    private int duration;
+    private LocalDate globalDate;
 
-    public FetchChatGroupMessageTask(String groupName) {
+    public FetchChatGroupMessageTask(String groupName, int duration, LocalDate globalDate) {
         this.groupName = groupName;
+        this.duration = duration;
+        this.globalDate = globalDate;
     }
 
     @Override
@@ -45,7 +52,17 @@ public class FetchChatGroupMessageTask extends Task<ObservableList<Message>> {
             q.getPstmt().setString(1, this.groupName);
             rs = q.getPstmt().executeQuery();
             while(rs.next()){
-                result.add(new Message(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString()));
+                // DO SOME TIMESTAMP CALCULATIONS
+                LocalDate date = LocalDate.parse(rs.getDate("timestamp").toString());
+
+                int daysBetween = (int) DAYS.between(date, globalDate);
+
+                System.out.println(daysBetween);
+
+                if(daysBetween <= duration){
+                    result.add(new Message(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString()));
+                }
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
