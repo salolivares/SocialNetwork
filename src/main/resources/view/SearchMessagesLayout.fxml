@@ -6,18 +6,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.cs174a.buzmo.controllers.SearchMessagesController">
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="&lt; Back" />
       <Label layoutX="215.0" layoutY="14.0" prefHeight="27.0" prefWidth="171.0" text="Search MyCircle Messages" />
-      <TextField fx:id="topicsTextField" layoutX="434.0" layoutY="394.0" prefHeight="27.0" prefWidth="128.0" promptText="Enter Topic Word" />
-      <ListView fx:id="topicsList" layoutX="434.0" layoutY="58.0" prefHeight="323.0" prefWidth="128.0" />
+      <TextField fx:id="topicTextField" layoutX="434.0" layoutY="394.0" prefHeight="27.0" prefWidth="128.0" promptText="Enter Topic Word" />
+      <ListView fx:id="topicListView" layoutX="434.0" layoutY="58.0" prefHeight="323.0" prefWidth="128.0" />
       <Label layoutX="459.0" layoutY="33.0" prefHeight="16.0" prefWidth="78.0" text="Topic Words" />
       <Button fx:id="addTopicButton" layoutX="439.0" layoutY="430.0" mnemonicParsing="false" text="Add Topic Word" />
       <ListView fx:id="messagesList" layoutX="14.0" layoutY="58.0" prefHeight="370.0" prefWidth="406.0" />
-      <TextField fx:id="numResultsTextField" layoutX="14.0" layoutY="459.0" prefHeight="27.0" prefWidth="41.0" />
       <Button fx:id="searchButton" layoutX="98.0" layoutY="459.0" mnemonicParsing="false" text="Search" />
-      <Label layoutX="14.0" layoutY="435.0" prefHeight="17.0" prefWidth="145.0" text="# Of Results" />
    </children>
 </AnchorPane>

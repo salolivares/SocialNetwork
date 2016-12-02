@@ -18,8 +18,11 @@ public class FetchUsersTask extends Task<ObservableList<String>> {
     private String topics;
     private Integer numMessages;
     private Integer numDays;
+    private String choice;
+    private String user;
 
-    public FetchUsersTask(String email, String topics, String numMessages, Integer numDays) {
+    public FetchUsersTask(String user, String email, String topics, String numMessages, Integer numDays, String choice) {
+        this.user = user;
         this.email = email;
         this.topics = topics;
         if (!numMessages.isEmpty())
@@ -27,6 +30,8 @@ public class FetchUsersTask extends Task<ObservableList<String>> {
         else
             this.numMessages = 0;
         this.numDays = numDays;
+        this.choice = choice;
+        System.out.println("Choice is: " + choice);
     }
 
     private ObservableList<String> fetchUsers()  {
@@ -42,28 +47,66 @@ public class FetchUsersTask extends Task<ObservableList<String>> {
 
         ResultSet rs = null;
 
-        try {
-            if(topics.isEmpty() && numMessages == 0) {
-                String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ?";
-                q.pQuery(sql);
-                q.getPstmt().setString(1, this.email);
-            } else if (numMessages == 0){
-                String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ? " +
-                        "UNION SELECT EMAIL FROM USERTOPICS, TOPICWORDS " +
-                        "WHERE TOPICWORDS.WORD = ? AND TOPICWORDS.TID = USERTOPICS.TID";
-                q.pQuery(sql);
-                q.getPstmt().setString(1, this.email);
-                q.getPstmt().setString(2, this.topics);
+        if (this.choice.equals("All Users")) {
+            try {
+                if (topics.isEmpty()) {
+                    String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ?";
+                    q.pQuery(sql);
+                    q.getPstmt().setString(1, this.email);
+                } else {
+                    String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ? " +
+                            "UNION SELECT EMAIL FROM USERTOPICS, TOPICWORDS " +
+                            "WHERE TOPICWORDS.WORD = ? AND TOPICWORDS.TID = USERTOPICS.TID";
+                    q.pQuery(sql);
+                    q.getPstmt().setString(1, this.email);
+                    q.getPstmt().setString(2, this.topics);
+                }
+                rs = q.getPstmt().executeQuery();
+                while (rs.next()) {
+                    String email = rs.getString("email");
+                    result.add(email);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                q.close();
             }
-            rs = q.getPstmt().executeQuery();
-            while(rs.next()){
-                String email = rs.getString("email");
-                result.add(email);
+        } else {
+            try {
+                if (topics.isEmpty()) {
+                    String sql = "SELECT EMAIL FROM USERS, FRIENDS WHERE USERS.EMAIL = ? " +
+                            "AND ((FRIENDS.EMAIL1 = ? AND FRIENDS.EMAIL2 = ?) " +
+                            "OR (FRIENDS.EMAIL1 = ? AND FRIENDS.EMAIL2 = ?))";
+                    q.pQuery(sql);
+                    q.getPstmt().setString(1, this.email);
+                    q.getPstmt().setString(2, this.email);
+                    q.getPstmt().setString(3, this.user);
+                    q.getPstmt().setString(4, this.user);
+                    q.getPstmt().setString(5, this.email);
+                } else {
+                    String sql = "SELECT EMAIL FROM USERS WHERE USERS.EMAIL = ? " +
+                            "UNION SELECT EMAIL1 FROM FRIENDS, USERTOPICS, TOPICWORDS " +
+                            "WHERE EMAIL1 = USERTOPICS.EMAIL AND TOPICWORDS.WORD = ? AND TOPICWORDS.TID = USERTOPICS.TID AND EMAIL2 = ? " +
+                            "UNION SELECT EMAIL2 FROM FRIENDS, USERTOPICS, TOPICWORDS " +
+                            "WHERE EMAIL2 = USERTOPICS.EMAIL AND TOPICWORDS.WORD = ? AND TOPICWORDS.TID = USERTOPICS.TID AND EMAIL1 = ?";
+                    q.pQuery(sql);
+                    q.getPstmt().setString(1, this.email);
+                    q.getPstmt().setString(2, this.topics);
+                    q.getPstmt().setString(3, this.user);
+                    q.getPstmt().setString(4, this.topics);
+                    q.getPstmt().setString(5, this.user);
+
+                }
+                rs = q.getPstmt().executeQuery();
+                while (rs.next()) {
+                    String email = rs.getString("email");
+                    result.add(email);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                q.close();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            q.close();
         }
 
 

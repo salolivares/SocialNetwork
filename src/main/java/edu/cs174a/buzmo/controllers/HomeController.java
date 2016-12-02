@@ -28,6 +28,7 @@ public class HomeController {
     @FXML private Button privateMessageButton;
     @FXML private DatePicker datePicker;
     @FXML private Button setTimeButton;
+    @FXML private Button searchMessagesButton;
     @FXML private TextField timeTextField;
 
     @FXML private Button summaryReportButton;
@@ -65,6 +66,7 @@ public class HomeController {
 
     private void handleRegisterUser(ActionEvent actionEvent) {
         mainApp.getGUIManager().showCreateAccountLayout();
+        searchMessagesButton.setOnAction(this::handleSearchMessagesAction);
     }
 
     private void handleSetTime(ActionEvent actionEvent) {
@@ -76,7 +78,7 @@ public class HomeController {
 
         final UpdateDBTimeTask updateDBTimeTask = new UpdateDBTimeTask(date.toString(), time.toString());
 
-        updateDBTimeTask.setOnSucceeded(t->{
+        updateDBTimeTask.setOnSucceeded(t -> {
 
             Platform.runLater(ps::stopSpinner);
             mainApp.setGlobalDate(date);
@@ -115,6 +117,10 @@ public class HomeController {
     }
 
     private void handleSearchButtonAction(ActionEvent actionEvent) { mainApp.getGUIManager().showSearchUsersLayout();}
+
+    private void handleSearchMessagesAction(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showSearchMessagesLayout();
+    }
 
     private void handlePrivateMessageButton(ActionEvent actionEvent) { mainApp.getGUIManager().showPrivateMessageLayout(); }
 

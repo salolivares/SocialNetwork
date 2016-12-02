@@ -20,7 +20,7 @@
       <Button fx:id="myCircleButton" layoutX="71.0" layoutY="92.0" mnemonicParsing="false" prefHeight="123.0" prefWidth="144.0" text="Go to MyCircle Menu" textAlignment="CENTER" wrapText="true" />
       <Button fx:id="summaryReportButton" layoutX="36.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Summary Report" textAlignment="CENTER" wrapText="true" />
       <Button fx:id="searchButton" layoutX="222.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Search People/Friend Requests" textAlignment="CENTER" wrapText="true" />
-      <Button layoutX="406.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Search Recent Messages" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="searchMessagesButton" layoutX="406.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Search Recent Messages" textAlignment="CENTER" wrapText="true" />
       <Button fx:id="logoutButton" layoutX="222.0" layoutY="444.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="167.0" text="Logout" textAlignment="CENTER" wrapText="true" />
       <Label fx:id="loggedinLabel" layoutX="14.0" layoutY="436.0" prefHeight="17.0" prefWidth="193.0" text="Logged In:" />
       <Label fx:id="isManagerLabel" layoutX="14.0" layoutY="457.0" prefHeight="17.0" prefWidth="193.0" text="Is Manager?:" />

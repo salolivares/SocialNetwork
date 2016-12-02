@@ -24,6 +24,7 @@ public class SearchUsersController {
     @FXML private TextField topicTextField;
     @FXML private TextField numMessagesTextField;
     @FXML private ChoiceBox<Integer> recentChoiceBox;
+    @FXML private ChoiceBox<String> choiceBox;
     @FXML private ListView<String> userListField;
     @FXML private Button searchButton;
     @FXML private Button addFriendButton;
@@ -41,6 +42,9 @@ public class SearchUsersController {
         searchButton.setOnAction(this::handleSearchAction);
         recentChoiceBox.setItems(FXCollections.observableArrayList(
                 1, 2, 3, 4, 5, 6, 7
+        ));
+        choiceBox.setItems(FXCollections.observableArrayList(
+                "Friends", "All Users"
         ));
         addFriendButton.setOnAction(this::handleAddFriendAction);
     }
@@ -68,23 +72,27 @@ public class SearchUsersController {
     }
 
     private void handleSearchAction(ActionEvent actionEvent) {
-        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
-        ps.startSpinner();
+        String choice = choiceBox.getSelectionModel().getSelectedItem();
+        if (choice != null) {
 
-        final FetchUsersTask fetchUsersTask = new FetchUsersTask(emailTextField.getText(), topicTextField.getText(),
-                                                numMessagesTextField.getText(), recentChoiceBox.getValue());
+            ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+            ps.startSpinner();
 
-        fetchUsersTask.setOnSucceeded(t -> {
-            Platform.runLater(ps::stopSpinner);
-            userListField.setItems(fetchUsersTask.getValue());
-        });
+            final FetchUsersTask fetchUsersTask = new FetchUsersTask(this.mainApp.getGUIManager().getEmail(), emailTextField.getText(), topicTextField.getText(),
+                    numMessagesTextField.getText(), recentChoiceBox.getValue(), choice);
 
-        fetchUsersTask.setOnFailed(t -> {
-            Platform.runLater(ps::stopSpinner);
-            System.out.println("FAILED");
-        });
+            fetchUsersTask.setOnSucceeded(t -> {
+                Platform.runLater(ps::stopSpinner);
+                userListField.setItems(fetchUsersTask.getValue());
+            });
 
-        mainApp.getDatabaseExecutor().submit(fetchUsersTask);
+            fetchUsersTask.setOnFailed(t -> {
+                Platform.runLater(ps::stopSpinner);
+                System.out.println("FAILED");
+            });
+
+            mainApp.getDatabaseExecutor().submit(fetchUsersTask);
+        }
     }
 
 
