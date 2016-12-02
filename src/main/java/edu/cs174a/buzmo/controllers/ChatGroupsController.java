@@ -3,6 +3,7 @@ package edu.cs174a.buzmo.controllers;
 import edu.cs174a.buzmo.MainApp;
 import edu.cs174a.buzmo.tasks.*;
 import edu.cs174a.buzmo.util.ChatGroup;
+import edu.cs174a.buzmo.util.Message;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
@@ -26,6 +28,7 @@ public class ChatGroupsController {
     @FXML private Button acceptButton;
     @FXML private Button inviteButton;
     @FXML private ListView<ChatGroup> chatGroupList;
+    @FXML private ListView<Message> messageList;
 
     @FXML private void initialize() {
         backButton.setOnAction(this::handleBackAction);
@@ -48,6 +51,30 @@ public class ChatGroupsController {
                 }
             }
         });
+        chatGroupList.setOnMouseClicked(this::handleChatGroupClick);
+    }
+
+    private void handleChatGroupClick(MouseEvent mouseEvent) {
+        changeMessageList(chatGroupList.getSelectionModel().getSelectedItem());
+    }
+
+    private void changeMessageList(ChatGroup selectedItem) {
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final FetchChatGroupMessageTask fetchChatGroupMessageTask = new FetchChatGroupMessageTask(selectedItem.getGroupName());
+
+        fetchChatGroupMessageTask.setOnSucceeded(t->{
+            Platform.runLater(ps::stopSpinner);
+            messageList.setItems(fetchChatGroupMessageTask.getValue());
+        });
+
+        fetchChatGroupMessageTask.setOnFailed(t->{
+            Platform.runLater(ps::stopSpinner);
+            System.out.println("FAILED");
+        });
+
+        mainApp.getDatabaseExecutor().submit(fetchChatGroupMessageTask);
     }
 
 
