@@ -2,6 +2,7 @@ package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
 import edu.cs174a.buzmo.tasks.FetchDBTask;
+import edu.cs174a.buzmo.tasks.IsManagerTask;
 import edu.cs174a.buzmo.tasks.UpdateDBTimeTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class HomeController {
     private MainApp mainApp;
     private String email;
+    private Integer isManager;
 
     @FXML private Label loggedinLabel;
     @FXML private Label isManagerLabel;
@@ -27,6 +29,13 @@ public class HomeController {
     @FXML private DatePicker datePicker;
     @FXML private Button setTimeButton;
     @FXML private TextField timeTextField;
+
+    @FXML private Button managerTopUsers;
+    @FXML private Button managerTopMessagesButton;
+    @FXML private Button managerInactiveUsersButton;
+    @FXML private Button managerFullReportButton;
+    @FXML private Button managerRegisterButton;
+
 
     public HomeController() {
     }
@@ -131,4 +140,40 @@ public class HomeController {
 
         mainApp.getDatabaseExecutor().submit(fetchDBTask);
     }
+
+    public void isManager(){
+        // lookup if user is manager
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final IsManagerTask isManagerTask = new IsManagerTask(mainApp.getGUIManager().getEmail());
+
+        isManagerTask.setOnSucceeded(t->{
+            Platform.runLater(()->{
+                ps.stopSpinner();
+                setManagerButtons(isManagerTask.getValue());
+            });
+            isManagerLabel.setText("Is Manager?" + String.valueOf(isManagerTask.getValue()));
+            this.isManager = isManagerTask.getValue();
+        });
+
+        isManagerTask.setOnFailed(t->{
+            Platform.runLater(ps::stopSpinner);
+        });
+
+        mainApp.getDatabaseExecutor().submit(isManagerTask);
+    }
+
+    private void setManagerButtons(Integer value) {
+        if(value != 0) {
+            // ENABLE ALL MANAGER BUTTONS
+            managerTopUsers.setVisible(true);
+            managerTopMessagesButton.setVisible(true);
+            managerInactiveUsersButton.setVisible(true);
+            managerFullReportButton.setVisible(true);
+            managerRegisterButton.setVisible(true);
+        }
+    }
+
+
 }
