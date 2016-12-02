@@ -233,7 +233,7 @@ public class GUIManager {
             // Give the controller access to the main app.
             MyCircleMessageController controller = loader.getController();
             controller.setMainApp(mainApp);
-//            controller.refreshMessages();
+            controller.refreshMessages();
 
         } catch (IOException e) {
             e.printStackTrace();
