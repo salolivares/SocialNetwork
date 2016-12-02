@@ -5,6 +5,7 @@ import edu.cs174a.buzmo.tasks.*;
 import edu.cs174a.buzmo.util.Message;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,6 +54,9 @@ public class MyCircleMessageController {
                 }
             }
         });
+        publicChoiceBox.setItems(FXCollections.observableArrayList(
+                "Public Message", "Private Message"
+        ));
     }
 
     private void handleBackAction(ActionEvent actionEvent) {
@@ -82,8 +86,13 @@ public class MyCircleMessageController {
     }
 
     private void sendMessage() {
+        String publicChoice = publicChoiceBox.getSelectionModel().getSelectedItem();
 
-        if (messageField.getText() != null) {
+        if (messageField.getText() != null && publicChoice != null && !topicListView.getItems().isEmpty()) {
+
+            int pub = 0;
+            if (publicChoice.equals("Public Message")) pub = 1;
+            else pub = 0;
 
             ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
             ps.startSpinner();
@@ -96,7 +105,7 @@ public class MyCircleMessageController {
             String timestamp = date.toString() + " " + time.toString();
 
             final SendMessageTask send = new SendMessageTask(mainApp.getGUIManager().getEmail(),
-                                            messageField.getText(), timestamp, 1, 0);
+                                            messageField.getText(), timestamp, 1, pub, topicListView.getItems());
 
             send.setOnSucceeded(t -> {
                 Platform.runLater(ps::stopSpinner);
