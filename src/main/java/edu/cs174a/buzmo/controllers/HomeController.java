@@ -34,6 +34,7 @@ public class HomeController {
     @FXML private Button managerTopMessagesButton;
     @FXML private Button managerInactiveUsersButton;
     @FXML private Button managerFullReportButton;
+    @FXML private Button managerRegisterButton;
 
 
     public HomeController() {
@@ -170,6 +171,7 @@ public class HomeController {
             managerTopMessagesButton.setVisible(true);
             managerInactiveUsersButton.setVisible(true);
             managerFullReportButton.setVisible(true);
+            managerRegisterButton.setVisible(true);
         }
     }
 

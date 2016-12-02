@@ -206,14 +206,6 @@ public class ChatGroupsController {
         grid.add(new Label("Duration"), 0, 1);
         grid.add(duration, 1, 1);
 
-        // Enable/Disable login button depending on whether a name was entered.
-        Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
-        loginButton.setDisable(true);
-
-        duration.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty());
-        });
-
         dialog.getDialogPane().setContent(grid);
 
         // Request focus on the name field by default.
@@ -222,7 +214,12 @@ public class ChatGroupsController {
         // Convert the result to a name-duration-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
-                return new Pair<>(name.getText(), Integer.parseInt(duration.getText()));
+                if(duration.getText().equals("")){
+                    return new Pair<>(name.getText(), 7);
+                } else {
+                    return new Pair<>(name.getText(), Integer.parseInt(duration.getText()));
+
+                }
             }
             return null;
         });
