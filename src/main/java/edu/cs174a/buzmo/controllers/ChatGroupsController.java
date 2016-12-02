@@ -75,9 +75,13 @@ public class ChatGroupsController {
     }
 
     private void handleSendButton(ActionEvent actionEvent) {
-        if(chatGroupList.getSelectionModel().getSelectedItem() != null) {
-            sendChatGroupMessage(chatGroupList.getSelectionModel().getSelectedItem());
-            changeMessageList(chatGroupList.getSelectionModel().getSelectedItem());
+        ChatGroup selectedItem = chatGroupList.getSelectionModel().getSelectedItem();
+
+        if(selectedItem != null) {
+            if(selectedItem.getMemberStatus() == 1){
+                sendChatGroupMessage(selectedItem);
+                changeMessageList(selectedItem);
+            }
         }
     }
 
@@ -92,7 +96,7 @@ public class ChatGroupsController {
         String timestamp = date.toString() + " " + time.toString();
 
         final SendChatGroupMessageTask sendChatGroupMessageTask = new SendChatGroupMessageTask(mainApp.getGUIManager().getEmail(), selectedItem.getGroupName(), messageTextField.getText(), timestamp, 1);
-        
+
         sendChatGroupMessageTask.setOnSucceeded(t->{
             Platform.runLater(ps::stopSpinner);
         });
@@ -110,24 +114,25 @@ public class ChatGroupsController {
     }
 
     private void changeMessageList(ChatGroup selectedItem) {
-        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
-        ps.startSpinner();
+        if(selectedItem.getMemberStatus() == 1) {
+            ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+            ps.startSpinner();
 
-        final FetchChatGroupMessageTask fetchChatGroupMessageTask = new FetchChatGroupMessageTask(selectedItem.getGroupName());
+            final FetchChatGroupMessageTask fetchChatGroupMessageTask = new FetchChatGroupMessageTask(selectedItem.getGroupName());
 
-        fetchChatGroupMessageTask.setOnSucceeded(t->{
-            Platform.runLater(ps::stopSpinner);
-            messageList.setItems(fetchChatGroupMessageTask.getValue());
-        });
+            fetchChatGroupMessageTask.setOnSucceeded(t -> {
+                Platform.runLater(ps::stopSpinner);
+                messageList.setItems(fetchChatGroupMessageTask.getValue());
+            });
 
-        fetchChatGroupMessageTask.setOnFailed(t->{
-            Platform.runLater(ps::stopSpinner);
-            System.out.println("FAILED");
-        });
+            fetchChatGroupMessageTask.setOnFailed(t -> {
+                Platform.runLater(ps::stopSpinner);
+                System.out.println("FAILED");
+            });
 
-        mainApp.getDatabaseExecutor().submit(fetchChatGroupMessageTask);
+            mainApp.getDatabaseExecutor().submit(fetchChatGroupMessageTask);
+        }
     }
-
 
     private void handleInviteAction(ActionEvent actionEvent) {
         ChatGroup chatGroup = chatGroupList.getSelectionModel().getSelectedItem();
