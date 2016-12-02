@@ -58,6 +58,7 @@ public class HomeController {
         setTimeButton.setOnAction(this::handleSetTime);
         managerRegisterButton.setOnAction(this::handleRegisterUser);
         summaryReportButton.setOnAction(this::handleSummaryReportAction);
+        searchMessagesButton.setOnAction(this::handleSearchMessagesAction);
     }
 
     private void handleSummaryReportAction(ActionEvent actionEvent) {
