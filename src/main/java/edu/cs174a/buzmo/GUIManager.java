@@ -73,6 +73,7 @@ public class GUIManager {
             controller.setMainApp(mainApp);
             controller.setEmail(this.email);
             controller.setNewTime();
+            controller.isManager();
         } catch (IOException e) {
             e.printStackTrace();
         }

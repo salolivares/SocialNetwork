@@ -2,6 +2,7 @@ package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
 import edu.cs174a.buzmo.tasks.FetchDBTask;
+import edu.cs174a.buzmo.tasks.IsManagerTask;
 import edu.cs174a.buzmo.tasks.UpdateDBTimeTask;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
@@ -130,5 +131,24 @@ public class HomeController {
         });
 
         mainApp.getDatabaseExecutor().submit(fetchDBTask);
+    }
+
+    public void isManager(){
+        // lookup if user is manager
+        ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+        ps.startSpinner();
+
+        final IsManagerTask isManagerTask = new IsManagerTask(mainApp.getGUIManager().getEmail());
+
+        isManagerTask.setOnSucceeded(t->{
+            Platform.runLater(ps::stopSpinner);
+            isManagerLabel.setText("Is Manager?" + String.valueOf(isManagerTask.getValue()));
+        });
+
+        isManagerTask.setOnFailed(t->{
+            Platform.runLater(ps::stopSpinner);
+        });
+
+        mainApp.getDatabaseExecutor().submit(isManagerTask);
     }
 }
