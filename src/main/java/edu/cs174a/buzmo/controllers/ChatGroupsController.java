@@ -110,6 +110,7 @@ public class ChatGroupsController {
     }
 
     private void handleChatGroupClick(MouseEvent mouseEvent) {
+        messageList.setItems(null);
         changeMessageList(chatGroupList.getSelectionModel().getSelectedItem());
     }
 
