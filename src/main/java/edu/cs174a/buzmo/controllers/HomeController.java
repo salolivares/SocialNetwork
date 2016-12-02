@@ -16,6 +16,7 @@ import java.util.Optional;
 public class HomeController {
     private MainApp mainApp;
     private String email;
+    private Integer isManager;
 
     @FXML private Label loggedinLabel;
     @FXML private Label isManagerLabel;
@@ -28,6 +29,12 @@ public class HomeController {
     @FXML private DatePicker datePicker;
     @FXML private Button setTimeButton;
     @FXML private TextField timeTextField;
+
+    @FXML private Button managerTopUsers;
+    @FXML private Button managerTopMessagesButton;
+    @FXML private Button managerInactiveUsersButton;
+    @FXML private Button managerFullReportButton;
+
 
     public HomeController() {
     }
@@ -141,8 +148,12 @@ public class HomeController {
         final IsManagerTask isManagerTask = new IsManagerTask(mainApp.getGUIManager().getEmail());
 
         isManagerTask.setOnSucceeded(t->{
-            Platform.runLater(ps::stopSpinner);
+            Platform.runLater(()->{
+                ps.stopSpinner();
+                setManagerButtons(isManagerTask.getValue());
+            });
             isManagerLabel.setText("Is Manager?" + String.valueOf(isManagerTask.getValue()));
+            this.isManager = isManagerTask.getValue();
         });
 
         isManagerTask.setOnFailed(t->{
@@ -151,4 +162,16 @@ public class HomeController {
 
         mainApp.getDatabaseExecutor().submit(isManagerTask);
     }
+
+    private void setManagerButtons(Integer value) {
+        if(value != 0) {
+            // ENABLE ALL MANAGER BUTTONS
+            managerTopUsers.setVisible(true);
+            managerTopMessagesButton.setVisible(true);
+            managerInactiveUsersButton.setVisible(true);
+            managerFullReportButton.setVisible(true);
+        }
+    }
+
+
 }
