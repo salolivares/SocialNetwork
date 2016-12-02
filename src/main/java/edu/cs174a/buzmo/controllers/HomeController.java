@@ -30,6 +30,8 @@ public class HomeController {
     @FXML private Button setTimeButton;
     @FXML private TextField timeTextField;
 
+    @FXML private Button summaryReportButton;
+
     @FXML private Button managerTopUsers;
     @FXML private Button managerTopMessagesButton;
     @FXML private Button managerInactiveUsersButton;
@@ -53,6 +55,16 @@ public class HomeController {
         chatGroupButton.setOnAction(this::handleChatGroupButton);
         privateMessageButton.setOnAction(this::handlePrivateMessageButton);
         setTimeButton.setOnAction(this::handleSetTime);
+        managerRegisterButton.setOnAction(this::handleRegisterUser);
+        summaryReportButton.setOnAction(this::handleSummaryReportAction);
+    }
+
+    private void handleSummaryReportAction(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showSummaryReportLayout();
+    }
+
+    private void handleRegisterUser(ActionEvent actionEvent) {
+        mainApp.getGUIManager().showCreateAccountLayout();
     }
 
     private void handleSetTime(ActionEvent actionEvent) {

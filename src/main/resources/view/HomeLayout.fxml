@@ -18,7 +18,7 @@
       <Button fx:id="privateMessageButton" layoutX="233.0" layoutY="92.0" mnemonicParsing="false" prefHeight="123.0" prefWidth="144.0" text="Go to Private Message Menu" textAlignment="CENTER" wrapText="true" />
       <Button fx:id="chatGroupButton" layoutX="396.0" layoutY="92.0" mnemonicParsing="false" prefHeight="123.0" prefWidth="144.0" text="Go to ChatGroup Menu" textAlignment="CENTER" wrapText="true" />
       <Button fx:id="myCircleButton" layoutX="71.0" layoutY="92.0" mnemonicParsing="false" prefHeight="123.0" prefWidth="144.0" text="Go to MyCircle Menu" textAlignment="CENTER" wrapText="true" />
-      <Button layoutX="36.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Summary Report" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="summaryReportButton" layoutX="36.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Summary Report" textAlignment="CENTER" wrapText="true" />
       <Button fx:id="searchButton" layoutX="222.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Search People/Friend Requests" textAlignment="CENTER" wrapText="true" />
       <Button layoutX="406.0" layoutY="289.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="167.0" text="Search Recent Messages" textAlignment="CENTER" wrapText="true" />
       <Button fx:id="logoutButton" layoutX="222.0" layoutY="444.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="167.0" text="Logout" textAlignment="CENTER" wrapText="true" />
