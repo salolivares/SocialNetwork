@@ -12,14 +12,12 @@
       <Label layoutX="46.0" layoutY="70.0" text="Number Of New Messages:" />
       <Label layoutX="46.0" layoutY="112.0" text="Total Number of Message Reads:" />
       <Label layoutX="46.0" layoutY="157.0" text="Average Number of New Message Reads:" />
-      <Label layoutX="46.0" layoutY="197.0" text="Average Number Of Reads For Messages Sent In the Last Period:" />
       <Label layoutX="46.0" layoutY="233.0" text="Top 3 User by new Message counts:" />
       <Label layoutX="46.0" layoutY="328.0" text="Number of users who send less than 3 messages:" />
       <Label layoutX="46.0" layoutY="381.0" text="Topic Word - Most read message" />
       <TextField fx:id="newMessageField" layoutX="232.0" layoutY="65.0" />
       <TextField fx:id="totalMessageReads" layoutX="268.0" layoutY="107.0" />
       <TextField fx:id="avgNewMessageReadsField" layoutX="316.0" layoutY="152.0" />
-      <TextField fx:id="avgNumReadMessages" layoutX="457.0" layoutY="192.0" prefHeight="27.0" prefWidth="79.0" />
       <TextField fx:id="numUsersLess3Field" layoutX="374.0" layoutY="323.0" />
       <ListView fx:id="topicList" layoutX="58.0" layoutY="402.0" prefHeight="83.0" prefWidth="428.0" />
       <ListView fx:id="top3UsersList" layoutX="58.0" layoutY="259.0" prefHeight="64.0" prefWidth="197.0" />
