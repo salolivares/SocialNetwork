@@ -1,9 +1,7 @@
 package edu.cs174a.buzmo.controllers;
 
 import edu.cs174a.buzmo.MainApp;
-import edu.cs174a.buzmo.tasks.CreateTopicTask;
-import edu.cs174a.buzmo.tasks.FetchFriendsTask;
-import edu.cs174a.buzmo.tasks.FetchMyCircleMessagesTask;
+import edu.cs174a.buzmo.tasks.*;
 import edu.cs174a.buzmo.util.Message;
 import edu.cs174a.buzmo.util.ProgressSpinner;
 import javafx.application.Platform;
@@ -11,6 +9,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * Created by jordannguyen on 11/30/16.
@@ -37,6 +40,7 @@ public class MyCircleMessageController {
         backButton.setOnAction(this::handleBackAction);
         refreshButton.setOnAction(this::handleRefreshAction);
         addTopicButton.setOnAction(this::handleAddTopicAction);
+        sendButton.setOnAction(this::handleSendAction);
         messageList.setCellFactory(param -> new ListCell<Message>() {
             @Override
             protected void updateItem(Message item, boolean empty) {
@@ -72,6 +76,41 @@ public class MyCircleMessageController {
         }
     }
 
+    private void handleSendAction(ActionEvent actionEvent) {
+        sendMessage();
+        populateMessages();
+    }
+
+    private void sendMessage() {
+
+        if (messageField.getText() != null) {
+
+            ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+            ps.startSpinner();
+
+
+            Duration timeElapsed = Duration.between(mainApp.getStartTime(), Instant.now());
+            LocalTime time = mainApp.getGlobalTime().plusMinutes(timeElapsed.toMinutes());
+            LocalDate date = mainApp.getGlobalDate();
+
+            String timestamp = date.toString() + " " + time.toString();
+
+            final SendMessageTask send = new SendMessageTask(mainApp.getGUIManager().getEmail(),
+                                            messageField.getText(), timestamp, 1, 0);
+
+            send.setOnSucceeded(t -> {
+                Platform.runLater(ps::stopSpinner);
+            });
+
+            send.setOnFailed(t -> {
+                Platform.runLater(ps::stopSpinner);
+                System.out.println("FAILED");
+            });
+            messageField.clear();
+            mainApp.getDatabaseExecutor().submit(send);
+        }
+    }
+
     private void populateMessages() {
         ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
         ps.startSpinner();
@@ -90,6 +129,9 @@ public class MyCircleMessageController {
 
         mainApp.getDatabaseExecutor().submit(fetchMessages);
     }
+
+
+
 
     public void refreshMessages(){
         refreshButton.fire();

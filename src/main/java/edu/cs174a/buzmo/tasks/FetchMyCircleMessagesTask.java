@@ -35,20 +35,25 @@ public class FetchMyCircleMessagesTask extends Task<ObservableList<Message>> {
         try {
 
             String sql = "SELECT * FROM ( " +
-                    "SELECT MESSAGES.* FROM MESSAGES, MYCIRCLEMSGS, FRIENDS " +
-                    "WHERE MESSAGES.MID = MYCIRCLEMSGS.MID " +
+                    "SELECT MESSAGES.* FROM MESSAGES, MYCIRCLEMESSAGES, FRIENDS " +
+                    "WHERE MESSAGES.MID = MYCIRCLEMESSAGES.MID " +
                     "AND MESSAGES.SENDER = FRIENDS.EMAIL1 " +
                     "AND FRIENDS.EMAIL2 = ? " +
                     "UNION " +
-                    "SELECT MESSAGES.* FROM MESSAGES, MYCIRCLEMSGS, FRIENDS " +
-                    "WHERE MESSAGES.MID = MYCIRCLEMSGS.MID " +
+                    "SELECT MESSAGES.* FROM MESSAGES, MYCIRCLEMESSAGES, FRIENDS " +
+                    "WHERE MESSAGES.MID = MYCIRCLEMESSAGES.MID " +
                     "AND MESSAGES.SENDER = FRIENDS.EMAIL2 " +
-                    "AND FRIENDS.EMAIL1 = ?" +
+                    "AND FRIENDS.EMAIL1 = ? " +
+                    "UNION " +
+                    "SELECT MESSAGES.* FROM MESSAGES, MYCIRCLEMESSAGES " +
+                    "WHERE MESSAGES.MID = MYCIRCLEMESSAGES.MID " +
+                    "AND MESSAGES.SENDER = ? " +
                     ")" +
                     "ORDER BY TIMESTAMP DESC ";
             q.pQuery(sql);
             q.getPstmt().setString(1, this.email);
             q.getPstmt().setString(2, this.email);
+            q.getPstmt().setString(3, this.email);
             rs = q.getPstmt().executeQuery();
             while(rs.next()){
                 result.add(new Message(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString()));
