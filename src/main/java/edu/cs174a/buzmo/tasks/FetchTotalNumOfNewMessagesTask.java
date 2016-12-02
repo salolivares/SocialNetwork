@@ -18,7 +18,7 @@ public class FetchTotalNumOfNewMessagesTask extends Task<Integer> {
 
     @Override
     protected Integer call() throws Exception {
-        return null;
+        return fetchMessages();
     }
 
     private Integer fetchMessages(){

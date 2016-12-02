@@ -295,6 +295,7 @@ public class GUIManager {
             // Give the controller access to the main app.
             SummaryReportController controller = loader.getController();
             controller.setMainApp(mainApp);
+            controller.getReport();
         } catch (IOException e) {
             e.printStackTrace();
         }
