@@ -2,6 +2,7 @@ package edu.cs174a.buzmo.tasks;
 
 import edu.cs174a.buzmo.util.DatabaseQuery;
 import edu.cs174a.buzmo.util.Message;
+import edu.cs174a.buzmo.util.MessageWithTopic;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -12,13 +13,13 @@ import java.sql.SQLException;
 /**
  * Created by jordannguyen on 12/1/16.
  */
-public class FetchMostReadTopicWordTask extends Task<ObservableList<Message>> {
+public class FetchMostReadTopicWordTask extends Task<ObservableList<MessageWithTopic>> {
 
     public FetchMostReadTopicWordTask() {}
 
-    private ObservableList<Message> fetchMessages()  {
+    private ObservableList<MessageWithTopic> fetchMessages()  {
         DatabaseQuery q = null;
-        ObservableList<Message> result = FXCollections.observableArrayList();
+        ObservableList<MessageWithTopic> result = FXCollections.observableArrayList();
 
         try {
             q = new DatabaseQuery();
@@ -33,11 +34,11 @@ public class FetchMostReadTopicWordTask extends Task<ObservableList<Message>> {
 
             String sql = "SELECT UNIQUE topicwords.word, messages.mid, messages.body, messages.sender, messages.timestamp " +
                     "FROM MessageTopics, Messages, TopicWords " +
-                    "WHERE TopicWords.tid = messagetopics.tid AND MESSAGES.mid = MESSAGETOPICS.mid;";
+                    "WHERE TopicWords.tid = messagetopics.tid AND MESSAGES.mid = MESSAGETOPICS.mid";
             q.pQuery(sql);
             rs = q.getPstmt().executeQuery();
             while(rs.next()){
-                result.add(new Message(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString()));
+                result.add(new MessageWithTopic(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString(), rs.getString("word")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,7 +50,7 @@ public class FetchMostReadTopicWordTask extends Task<ObservableList<Message>> {
     }
 
     @Override
-    protected ObservableList<Message> call() throws Exception {
+    protected ObservableList<MessageWithTopic> call() throws Exception {
         return fetchMessages();
     }
 }

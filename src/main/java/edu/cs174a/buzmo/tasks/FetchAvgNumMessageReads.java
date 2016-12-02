@@ -13,12 +13,12 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * Created by jordannguyen on 12/1/16.
  */
 public class FetchAvgNumMessageReads extends Task<Integer> {
-    private String groupName;
+
     private int duration;
     private LocalDate globalDate;
 
-    public FetchAvgNumMessageReads(String groupName, int duration, LocalDate globalDate) {
-        this.groupName = groupName;
+    public FetchAvgNumMessageReads(int duration, LocalDate globalDate) {
+
         this.duration = duration;
         this.globalDate = globalDate;
     }

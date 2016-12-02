@@ -16,12 +16,12 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * Created by jordannguyen on 12/1/16.
  */
 public class FetchNumMessageReads extends Task<Integer> {
-    private String groupName;
+
     private int duration;
     private LocalDate globalDate;
 
-    public FetchNumMessageReads(String groupName, int duration, LocalDate globalDate) {
-        this.groupName = groupName;
+    public FetchNumMessageReads(int duration, LocalDate globalDate) {
+
         this.duration = duration;
         this.globalDate = globalDate;
     }
