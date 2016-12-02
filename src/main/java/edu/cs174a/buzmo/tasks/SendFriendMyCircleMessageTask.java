@@ -1,28 +1,26 @@
 package edu.cs174a.buzmo.tasks;
 
 import edu.cs174a.buzmo.util.DatabaseQuery;
-import edu.cs174a.buzmo.util.Message;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-
-public class SendMessageTask extends Task<Void> {
+public class SendFriendMyCircleMessageTask extends Task<Void> {
     private String email;
     private String body;
     private String timestamp;
     private int numRead;
-    private int pub;
     private ObservableList<String> topics;
+    private ObservableList<String> friends;
 
-    public SendMessageTask(String email, String body, String timestamp, int numRead, int pub, ObservableList<String> topics) {
+    public SendFriendMyCircleMessageTask(String email, String body, String timestamp, int numRead, ObservableList<String> topics, ObservableList<String> friends) {
         this.email = email;
         this.body = body;
         this.numRead = numRead;
-        this.pub = pub;
         this.topics = topics;
+        this.friends = friends;
 
         Integer sec = LocalDateTime.now().getSecond();
         this.timestamp = timestamp + ":"+ sec.toString();
@@ -38,7 +36,6 @@ public class SendMessageTask extends Task<Void> {
             return;
         }
 
-
         try {
             String sql = "INSERT INTO SALOLIVARES.MESSAGES(body, timestamp, sender, num_read) VALUES (?,TO_DATE(?, 'YYYY-MM-DD HH:MI:SS'),?,?)";
             q.pQuery(sql);
@@ -53,7 +50,7 @@ public class SendMessageTask extends Task<Void> {
         }
     }
 
-    private void insertIntoMyCircleTable() {
+    private void insertIntoWallPostTable(String friend) {
         DatabaseQuery q = null;
         try {
             q = new DatabaseQuery();
@@ -63,13 +60,13 @@ public class SendMessageTask extends Task<Void> {
         }
 
         try {
-            String sql = "INSERT INTO mycirclemessages(mid, ispublic) " +
+            String sql = "INSERT INTO wallposts(mid, receiver) " +
                     "VALUES ((SELECT MID FROM MESSAGES WHERE BODY = ? AND TIMESTAMP = TO_DATE(?, 'YYYY-MM-DD HH:MI:SS') AND SENDER = ?), ?)";
             q.pQuery(sql);
             q.getPstmt().setString(1, this.body);
             q.getPstmt().setString(2, this.timestamp);
             q.getPstmt().setString(3, this.email);
-            q.getPstmt().setInt(4, this.pub);
+            q.getPstmt().setString(4, friend);
             q.getPstmt().executeUpdate();
             q.close();
         } catch (SQLException e) {
@@ -105,10 +102,8 @@ public class SendMessageTask extends Task<Void> {
     @Override
     protected Void call() throws Exception {
         sendMessage();
-        insertIntoMyCircleTable();
-        for (String topic : topics) {
-            insertMessageTopic(topic);
-        }
+        friends.forEach(this::insertIntoWallPostTable);
+        topics.forEach(this::insertMessageTopic);
         return null;
     }
 }
