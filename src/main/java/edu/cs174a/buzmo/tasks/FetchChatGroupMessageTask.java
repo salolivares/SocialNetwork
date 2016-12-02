@@ -35,13 +35,17 @@ public class FetchChatGroupMessageTask extends Task<ObservableList<Message>> {
         ResultSet rs = null;
 
         try {
-
-            String sql = "";
+            String sql = "SELECT * FROM " +
+                    "(SELECT MESSAGES.* " +
+                    "FROM MESSAGES, CHATGROUPMESSAGES " +
+                    "WHERE MESSAGES.mid = CHATGROUPMESSAGES.mid " +
+                    "AND CHATGROUPMESSAGES.chatgroupid = (SELECT chatgroupid FROM CHATGROUPS WHERE GROUP_NAME = ? ) ) " +
+                    "ORDER BY timestamp ASC";
             q.pQuery(sql);
             q.getPstmt().setString(1, this.groupName);
             rs = q.getPstmt().executeQuery();
             while(rs.next()){
-                result.add(new Message(rs.getString("sender"), rs.getString("body")));
+                result.add(new Message(rs.getInt("mid"), rs.getString("sender"), rs.getString("body"), rs.getTimestamp("timestamp").toString()));
             }
         } catch (SQLException e) {
             e.printStackTrace();

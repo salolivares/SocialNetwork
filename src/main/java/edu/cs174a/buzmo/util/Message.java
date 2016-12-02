@@ -1,8 +1,5 @@
 package edu.cs174a.buzmo.util;
 
-/**
- * Created by jordannguyen on 12/1/16.
- */
 public class Message {
     private int mid;
     private String body;
