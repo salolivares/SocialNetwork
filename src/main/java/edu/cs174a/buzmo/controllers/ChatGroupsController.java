@@ -27,8 +27,10 @@ public class ChatGroupsController {
     @FXML private Button refreshButton;
     @FXML private Button acceptButton;
     @FXML private Button inviteButton;
+    @FXML private Button sendButton;
     @FXML private ListView<ChatGroup> chatGroupList;
     @FXML private ListView<Message> messageList;
+    @FXML private TextField messageTextField;
 
     @FXML private void initialize() {
         backButton.setOnAction(this::handleBackAction);
@@ -37,6 +39,7 @@ public class ChatGroupsController {
         refreshButton.setOnAction(this::handleRefreshAction);
         acceptButton.setOnAction(this::handleAcceptAction);
         inviteButton.setOnAction(this::handleInviteAction);
+        sendButton.setOnAction(this::handleSendButton);
         chatGroupList.setCellFactory(param -> new ListCell<ChatGroup>() {
             @Override
             protected void updateItem(ChatGroup item, boolean empty) {
@@ -52,6 +55,17 @@ public class ChatGroupsController {
             }
         });
         chatGroupList.setOnMouseClicked(this::handleChatGroupClick);
+    }
+
+    private void handleSendButton(ActionEvent actionEvent) {
+        if(chatGroupList.getSelectionModel().getSelectedItem() != null) {
+            sendChatGroupMessage(chatGroupList.getSelectionModel().getSelectedItem());
+            changeMessageList(chatGroupList.getSelectionModel().getSelectedItem());
+        }
+    }
+
+    private void sendChatGroupMessage(ChatGroup selectedItem) {
+        
     }
 
     private void handleChatGroupClick(MouseEvent mouseEvent) {
