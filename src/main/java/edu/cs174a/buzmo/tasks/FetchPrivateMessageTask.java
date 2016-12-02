@@ -18,6 +18,7 @@ public class FetchPrivateMessageTask extends Task<ObservableList<Message>> {
 
     public FetchPrivateMessageTask(String email, String friend) {
         this.email = email; this.friend = friend;
+        System.out.println("email is: " + email + " friend is: " + friend);
     }
 
     private ObservableList<Message> fetchPrivateMessages()  {
@@ -40,13 +41,13 @@ public class FetchPrivateMessageTask extends Task<ObservableList<Message>> {
                     "WHERE MESSAGES.mid = PRIVATEMESSAGES.mid " +
                     "AND MESSAGES.sender = ? " +
                     "AND PRIVATEMESSAGES.receiver = ? " +
-                    "AND PRIVATEMESSAGES.flag = 0 OR PRIVATEMESSAGES.flag = 2 " +
+                    "AND (PRIVATEMESSAGES.flag = 0 OR PRIVATEMESSAGES.flag = 2) " +
                     "UNION " +
                     "SELECT MESSAGES.* FROM MESSAGES, PRIVATEMESSAGES " +
                     "WHERE MESSAGES.mid = PRIVATEMESSAGES.mid " +
                     "AND MESSAGES.sender = ? " +
                     "AND PRIVATEMESSAGES.receiver = ? " +
-                    "AND PRIVATEMESSAGES.flag = 0 OR PRIVATEMESSAGES.flag = 1) " +
+                    "AND (PRIVATEMESSAGES.flag = 0 OR PRIVATEMESSAGES.flag = 1)) " +
                     "ORDER BY timestamp ASC";
             q.pQuery(sql);
             q.getPstmt().setString(1, this.email);
@@ -62,7 +63,6 @@ public class FetchPrivateMessageTask extends Task<ObservableList<Message>> {
         } finally {
             q.close();
         }
-
 
         return result;
     }

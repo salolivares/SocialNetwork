@@ -40,7 +40,7 @@ public class PrivateMessageController {
         backButton.setOnAction(this::handleBackAction);
         refreshButton.setOnAction(this::handleRefreshAction);
         sendButton.setOnAction(this::handleSendAction);
-
+        deleteMessage.setOnAction(this::handleDeleteAction);
         messageList.setCellFactory(param -> new ListCell<Message>() {
             @Override
             protected void updateItem(Message item, boolean empty) {
@@ -71,6 +71,11 @@ public class PrivateMessageController {
         populateMessages();
     }
 
+    private void handleDeleteAction(ActionEvent actionEvent) {
+        deleteMessage();
+        populateMessages();
+    }
+
     private void populateMessages() {
 
         String friend = friendsList.getSelectionModel().getSelectedItem();
@@ -83,6 +88,7 @@ public class PrivateMessageController {
 
             fetchPM.setOnSucceeded(t -> {
                 Platform.runLater(ps::stopSpinner);
+                messageList.setItems(null);
                 messageList.setItems(fetchPM.getValue());
             });
 
@@ -121,8 +127,31 @@ public class PrivateMessageController {
                 Platform.runLater(ps::stopSpinner);
                 System.out.println("FAILED");
             });
-
+            messageTextField.clear();
             mainApp.getDatabaseExecutor().submit(fetchPM);
+        }
+    }
+
+    private void deleteMessage() {
+
+        Message msg = messageList.getSelectionModel().getSelectedItem();
+        if (msg != null) {
+
+            ProgressSpinner ps = new ProgressSpinner(mainApp.getRootLayout());
+            ps.startSpinner();
+
+            final DeletePrivateMessageTask deletePM = new DeletePrivateMessageTask(mainApp.getGUIManager().getEmail(), msg.getSender(), msg.getMid());
+
+            deletePM.setOnSucceeded(t -> {
+                Platform.runLater(ps::stopSpinner);
+            });
+
+            deletePM.setOnFailed(t -> {
+                Platform.runLater(ps::stopSpinner);
+                System.out.println("FAILED");
+            });
+
+            mainApp.getDatabaseExecutor().submit(deletePM);
         }
     }
 
